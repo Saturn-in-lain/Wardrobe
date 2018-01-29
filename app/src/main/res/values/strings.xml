@@ -1,0 +1,150 @@
+<resources>
+    <string name="app_name">Wardrobe</string>
+    <string name="android_studio">Android Studio</string>
+
+    <!-- BUNDLE ID -->
+    <string name="bundle_hash">hash</string>
+    <string name="bundle_new_item">category</string>
+    <string name="bundle_new_item_index">index</string>
+    <string name="bundle_id_item">id</string>
+
+    <!-- LOGIN PAGE -->
+    <string name="welcome_string">Welcome to Wardrobe</string>
+    <string name="login_button_text">START</string>
+
+    <string name="login_your_family_members">   Your family members </string>
+    <string name="login_create_your_avatar">    Create your avatar  </string>
+    <string name="login_type_your_name">        Type your name      </string>
+    <string name="login_create">                Create              </string>
+
+    <!-- WARNINGS -->
+    <string name="warning_message">    Empty data in your profile   </string>
+
+    <!-- 3 RED DOT MENUS -->
+    <string name="action_settings">     Settings    </string>
+    <string name="action_help">         Help        </string>
+
+    <!-- MENU ITEMS -->
+    <string name="menu_upper_level">        Upper Level         </string>
+    <string name="menu_lower_level">        Lower level         </string>
+    <string name="menu_warm_clothes">       Warm Clothes        </string>
+    <string name="menu_hats">               Hats                </string>
+    <string name="menu_accessories">        Accessories         </string>
+    <string name="menu_boots">              Boots               </string>
+    <string name="menu_combinations">       Combinations        </string>
+    <string name="menu_weather_settings">   Weather settings    </string>
+    <string name="menu_settings">           Settings            </string>
+    <string name="menu_my_looks">           My looks            </string>
+    <string name="menu_wish_list">          Wish list           </string>
+
+    <!-- NEW ITEM -->
+    <string name="item_name">            Item naming                </string>
+    <string name="item_color">           Item color                 </string>
+    <string name="item_purchase_date">   Purchase date              </string>
+    <string name="item_price">           Price                      </string>
+    <string name="item_warms_level">     Define warms of item       </string>
+    <string name="item_attitude">        Your favor level           </string>
+    <string name="item_washing">         Washing items              </string>
+    <string name="item_junk">            Through in trash?          </string>
+    <string name="item_vision">          Can be seen by family?     </string>
+    <string name="item_category">        Category                   </string>
+    <string name="item_relation">        Relation                   </string>
+
+    <!-- PATH -->
+    <string name="path_main">/sdcard/Wardrobe/</string>
+    <string name="path_upper_outfit">   upper_outfit    </string>
+    <string name="path_lower_outfit">   lower_outfit    </string>
+    <string name="path_outerwear">      outerwear       </string>
+    <string name="path_hats">           hats            </string>
+    <string name="path_shoes">          shoes           </string>
+    <string name="path_accessories">    accessories     </string>
+    <string name="path_users">          users           </string>
+
+    <!-- PERMISSIONS -->
+    <string name="persmission_camera">Camera</string>
+    <string name="persmission_read_external_storage">Read External Storage</string>
+    <string name="persmission_write_external_storage">Write External Storage</string>
+    <string name="persmission_message_granting">You need to grant access to</string>
+    <string name="persmission_ok">OK</string>
+    <string name="persmission_cancel">Cancel</string>
+
+    <!-- ITEMS CATEGORY -->
+    <string name="category_none">           None            </string>
+    <string name="category_summer">         Summer          </string>
+    <string name="category_autumn">         Autumn          </string>
+    <string name="category_spring">         Spring          </string>
+    <string name="category_winter">         Winter          </string>
+    <string name="category_spring_summer">  Summer-Spring   </string>
+    <string name="category_winter_autumn">  Winter-Autumn   </string>
+
+
+    <!-- ITEMS RELATIONS -->
+    <string name="relations_casual">    Casual      </string>
+    <string name="relations_beach">     Beach       </string>
+    <string name="relations_sports">    Sports      </string>
+    <string name="relations_hobby">     Hobby       </string>
+    <string name="relations_Evening">   Evening     </string>
+
+
+    <!-- ITEMS WASHING  -->
+    <string name="washing_can">         Can be washed       </string>
+    <string name="washing_light">       Careful washing     </string>
+    <string name="washing_delicate">    Delicate washing    </string>
+    <string name="washing_till_30">     Till 30 degrees     </string>
+    <string name="washing_till_40">     Till 40 degrees     </string>
+    <string name="washing_above_50">    Above 50 degrees    </string>
+    <string name="washing_not">         Do not wash         </string>
+    <string name="washing_only_hand">   Only hand washing   </string>
+    <string name="washing_not_shower">  Do not shower       </string>
+
+    <!-- ITEMS DRYING  -->
+    <string name="drying_1">  Can be dried in washing machine       </string>
+    <string name="drying_2">  Not in drum                           </string>
+    <string name="drying_3">  Less than 60 degrees                  </string>
+    <string name="drying_4">  Average 80 degrees                    </string>
+    <string name="drying_5">  Dry at high degree                    </string>
+    <string name="drying_6">  Carefull                              </string>
+    <string name="drying_7">  Delicate                              </string>
+    <string name="drying_8">  Can be shower and dry                 </string>
+    <string name="drying_9">  Can NOT be shower and dry             </string>
+    <string name="drying_10"> Dry vertically                        </string>
+    <string name="drying_11"> Dry vertically without shower         </string>
+    <string name="drying_12"> Dry horizontally                      </string>
+    <string name="drying_13"> Dry horizontally without shower       </string>
+    <string name="drying_14"> Can be dried in washing machine       </string>
+
+    <!-- ITEMS IRONING  -->
+    <string name="ironing_1"> Can be iron      </string>
+    <string name="ironing_2"> Do not iron      </string>
+    <string name="ironing_3"> Iron till 110    </string>
+    <string name="ironing_4"> Iron till 150    </string>
+    <string name="ironing_5"> Iron till 200    </string>
+    <string name="ironing_6"> Fo not steam off </string>
+
+    <!-- ITEMS PROF CLEANING  -->
+    <string name="cleaning_1"> Dry cleaning        </string>
+    <string name="cleaning_2"> No cleaning allowed </string>
+    <string name="cleaning_3"> With any solvent    </string>
+    <string name="cleaning_4"> Special type one    </string>
+    <string name="cleaning_5"> Special type two    </string>
+    <string name="cleaning_6"> Same but with care  </string>
+    <string name="cleaning_7"> Aqua cleaning       </string>
+
+    <!-- ITEMS WHITENING  -->
+    <string name="whitening_1"> Can we whitened      </string>
+    <string name="whitening_2"> Can not be whitened  </string>
+    <string name="whitening_3"> Chlorine allowed     </string>
+    <string name="whitening_4"> Chlorine not allowed </string>
+
+    <!-- LOGIN CHOOSER-->
+    <string name="add_to_family">Add to family</string>
+    <string name="login_chooser_name">Name</string>
+    <string name="login_chooser_save">Save</string>
+
+    <!-- JUNK -->
+    <string name="new_item_default_category">Default category</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
+
+
+</resources>

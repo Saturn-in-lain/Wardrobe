@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.wardrob.wardrob.IV_newlook.NewLookActivity"
+    android:background="@drawable/main_gradient_list">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgHat"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:foregroundGravity="center|center_vertical"
+            android:src="@drawable/hat"
+            android:onClick="onHatSelectionClick"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/imgAccessories"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:foregroundGravity="center|center_vertical"
+                android:src="@drawable/accessories"
+                android:onClick="onAccessoriesSelectionClick"/>
+
+            <ImageView
+                android:id="@+id/imgUpperLevel"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center"
+                android:foregroundGravity="center|center_vertical"
+                android:src="@drawable/shirt"
+                android:onClick="onUpperLevelSelectionClick"/>
+
+            <ImageView
+                android:id="@+id/imgWarmLevel"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="25dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:foregroundGravity="center|center_vertical"
+                android:src="@drawable/coat"
+                android:onClick="onWarmLevelSelectionClick"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgLowerLevel"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:foregroundGravity="center|center_vertical"
+                android:scaleType="fitXY"
+                android:src="@drawable/pants"
+                android:onClick="onLowerLevelSelectionClick"/>
+
+            <ImageView
+                android:id="@+id/imgBoots"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:foregroundGravity="center|center_vertical"
+                android:src="@drawable/boots"
+                android:scaleType="fitXY"
+                android:onClick="onBootsSelectionClick"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

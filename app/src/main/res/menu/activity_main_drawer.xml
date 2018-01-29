@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- THIS IS MAIN WARDROBE CATEGORIES-->
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_upper_level"
+            android:icon="@drawable/shirt"
+            android:title="@string/menu_upper_level" />
+        <item
+            android:id="@+id/nav_lower_level"
+            android:icon="@drawable/pants"
+            android:title="@string/menu_lower_level" />
+        <item
+            android:id="@+id/nav_warm_level"
+            android:icon="@drawable/coat"
+            android:title="@string/menu_warm_clothes" />
+        <item
+            android:id="@+id/nav_hats_level"
+            android:icon="@drawable/hat"
+            android:title="@string/menu_hats" />
+        <item
+            android:id="@+id/nav_boots_level"
+            android:icon="@drawable/boots"
+            android:title="@string/menu_boots" />
+        <item
+            android:id="@+id/nav_accessories_level"
+            android:icon="@drawable/accessories"
+            android:title="@string/menu_accessories" />
+
+    </group>
+
+    <!-- THIS IS ADDITIONAL WARDROBE CATEGORIES-->
+
+    <item android:title="@string/menu_combinations">
+        <menu>
+            <item
+                android:id="@+id/nav_my_looks"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_my_looks" />
+            <item
+                android:id="@+id/nav_wish_list"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/menu_wish_list" />
+        </menu>
+    </item>
+
+    <!-- THIS IS ADDITIONAL WARDROBE CATEGORIES-->
+
+    <item android:title="@string/menu_settings">
+        <menu>
+            <item
+                android:id="@+id/nav_weather"
+                android:icon="@drawable/weather"
+                android:title="@string/menu_weather_settings" />
+        </menu>
+    </item>
+
+</menu>

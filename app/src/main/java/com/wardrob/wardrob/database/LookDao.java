@@ -18,6 +18,9 @@ public interface LookDao
     @Query("SELECT * FROM look_table WHERE uid IN (:Ids)")
     List<LookObject> loadAllByIds(int[] Ids);
 
+    @Query("SELECT * FROM look_table WHERE user_name LIKE :first")
+    List<LookObject> findByUserName(String first);
+
     @Query("SELECT * FROM look_table WHERE look_name LIKE :first LIMIT 1")
     LookObject findByName(String first);
 
@@ -29,6 +32,7 @@ public interface LookDao
 
 //    @Query("SELECT * FROM item_table WHERE item_main_category LIKE :category AND user_name LIKE :user")
 //    List<LookObject> findItemsByCategoryAndUser(String category, String user);
+
 
     @Insert
     void insertAll(LookObject... item);

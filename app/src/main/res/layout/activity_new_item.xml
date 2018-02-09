@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wardrob.wardrob.III_newitem.NewItemActivity"
+    tools:context="com.wardrob.wardrob.screens.new_item.NewItemActivity"
     android:background="@drawable/main_gradient_2">
 
     <ScrollView

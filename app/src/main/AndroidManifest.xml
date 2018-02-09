@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".I_startup.StartupActivity">
+        <activity android:name=".screens.startup.StartupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,10 +26,12 @@
         <activity
             android:name=".II_mainscreen.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".III_newitem.NewItemActivity" />
+        <activity android:name=".screens.new_item.NewItemActivity" />
         <activity android:name=".I_startup_login_chooser.LoginChooserActivity" />
-        <activity android:name=".I_startup_new_member.LoginCreateActivity" />
-        <activity android:name=".IV_newlook.NewLookActivity"></activity>
+        <activity android:name=".screens.fragments.fragment_startup_creater.FragmentStartupCreate" />
+        <activity android:name=".screens.new_look.NewLookActivity" />
+        <activity android:name=".screens.mainscreen.MainGlobalActivity" />
+        <activity android:name=".screens.listscreen.ItemsListActivity"></activity>
     </application>
 
 </manifest>

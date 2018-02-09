@@ -9,6 +9,8 @@ public class LookObject
 {
     @PrimaryKey(autoGenerate = true)
     private int uid;
+    @ColumnInfo(name = "user_name")
+    private String userName;
     @ColumnInfo(name = "look_name")
     private String lookName;
     @ColumnInfo(name = "look_hat")
@@ -30,6 +32,11 @@ public class LookObject
     { uid = id;}
     public int getUid()
     { return uid;}
+    //=============================================================
+    public void setUserName(String name)
+    { userName = name;}
+    public String getUserName()
+    { return userName;}
     //=============================================================
     public void setLookName(String name)
     { lookName = name;}

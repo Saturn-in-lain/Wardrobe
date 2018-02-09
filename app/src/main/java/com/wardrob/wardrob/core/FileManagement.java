@@ -176,6 +176,7 @@ public class FileManagement
      * Function: getImageFileInByteArray
      * @Description:
      * @param filePath String
+     *  TODO: This is same as GeneralActivity stuf.. remove this similarity
      */
     public static byte[] getImageFileInByteArray(String filePath)
     {

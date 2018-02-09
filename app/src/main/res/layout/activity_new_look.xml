@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wardrob.wardrob.IV_newlook.NewLookActivity"
+    tools:context="com.wardrob.wardrob.screens.new_look.NewLookActivity"
     android:background="@drawable/main_gradient_list">
 
     <LinearLayout
@@ -12,6 +12,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/edtLookName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
+            android:hint="@string/look_type_name_of_your_new_look"/>
 
         <ImageView
             android:id="@+id/imgHat"
@@ -87,5 +97,25 @@
                 android:scaleType="fitXY"
                 android:onClick="onBootsSelectionClick"/>
         </LinearLayout>
+
+        <!-- BUTTON -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnSaveNewLook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:text="SAVE"
+                android:onClick="onSaveNewLook"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

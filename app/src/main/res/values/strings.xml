@@ -2,15 +2,25 @@
     <string name="app_name">Wardrobe</string>
     <string name="android_studio">Android Studio</string>
 
+    <!-- TABS -->
+    <string name="tab_items">     Items    </string>
+    <string name="tab_looks">     Looks    </string>
+    <string name="tab_settings">  Settings </string>
+
+    <!-- STATE ID -->
+    <string name="state_open">  open    </string>
+    <string name="state_pick">  pick    </string>
+
     <!-- BUNDLE ID -->
-    <string name="bundle_hash">hash</string>
-    <string name="bundle_new_item">category</string>
-    <string name="bundle_new_item_index">index</string>
-    <string name="bundle_id_item">id</string>
+    <string name="bundle_hash">             hash    </string>
+    <string name="bundle_new_item">         category </string>
+    <string name="bundle_state">            state </string>
+    <string name="bundle_new_item_index">   index   </string>
+    <string name="bundle_id_item">          id      </string>
 
     <!-- LOGIN PAGE -->
-    <string name="welcome_string">Welcome to Wardrobe</string>
-    <string name="login_button_text">START</string>
+    <string name="welcome_string">      Welcome to Wardrobe </string>
+    <string name="login_button_text">   START               </string>
 
     <string name="login_your_family_members">   Your family members </string>
     <string name="login_create_your_avatar">    Create your avatar  </string>
@@ -31,6 +41,7 @@
     <string name="menu_hats">               Hats                </string>
     <string name="menu_accessories">        Accessories         </string>
     <string name="menu_boots">              Boots               </string>
+
     <string name="menu_combinations">       Combinations        </string>
     <string name="menu_weather_settings">   Weather settings    </string>
     <string name="menu_settings">           Settings            </string>
@@ -145,6 +156,7 @@
     <string name="new_item_default_category">Default category</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
+    <string name="look_type_name_of_your_new_look">Type name of your new look</string>
 
 
 </resources>

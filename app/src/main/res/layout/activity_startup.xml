@@ -12,64 +12,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
 
     android:background="@drawable/login_gradient_list"
-    tools:context="com.wardrob.wardrob.I_startup.StartupActivity">
+    tools:context="com.wardrob.wardrob.screens.startup.StartupActivity">
 
-
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/startup_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/layout_login"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="90dp"/>
-
-            <ImageView
-                android:id="@+id/image_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:onClick="onChooseUser"
-                android:foregroundGravity="center_vertical|center|center_horizontal"
-                app:srcCompat="@drawable/default_logo_1" />
-
-            <TextView
-                android:id="@+id/login_welcome_text"
-                style="@style/Welcome_String"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:fadingEdge="horizontal"
-                android:scrollHorizontally="true"
-                android:text="@string/welcome_string"
-                android:foregroundGravity="center_vertical|center|center_horizontal"/>
-
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-
-                android:background="@drawable/button_rounded"
-                android:text="@string/login_button_text"
-                android:textColor="#FFFFFF"
-
-                android:onClick="onStartApplication"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"/>
-
-        </LinearLayout>
-    </ScrollView>
-
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </LinearLayout>

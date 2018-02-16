@@ -9,4 +9,6 @@ public interface FragmentStartupChooserView
     Context getThis();
 
     LinearLayout getAvailableUsersLayout();
+
+    void closeFragment();
 }

@@ -3,8 +3,10 @@ package com.wardrob.wardrob.screens.fragments.fragment_startup_creater;
 import com.wardrob.wardrob.R;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
@@ -31,26 +33,25 @@ public class FragmentStartupCreatePresenter
      * @param avatarName
      * @param gender
      */
-    public void saveNewMemberInDataBase(String avatarName, String gender)
+    public void saveNewMemberInDataBase(String avatarName, String gender, String avatar_file)
     {
         if(null != avatarName && null != gender)
         {
             if( (avatarName.length() > 0) && (gender.length() > 0))
             {
-                String avatar_file = object.destination.getPath();
-
-                if (null == avatar_file)
-                {
-                    Toast.makeText(view.getThis(), "Choose default avatar here?!", Toast.LENGTH_LONG).show();
-                }
-                else
-                {
                     Toast.makeText(view.getThis(), "All information is correct", Toast.LENGTH_LONG).show();
-                    addUserInSystem(avatarName,gender,avatar_file);
+                    addUserInSystem(avatarName, gender, avatar_file);
+                    this.view.closeFragment();
 
-                    this.view.closeActivity();
-                }
+//                    FragmentTransaction fragmentTransaction = this.view.getFragmentManager().beginTransaction();
+//                    fragmentTransaction.replace(R.id.fra, fr);
+//                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//                    fragmentTransaction.commit();
+
+
             }
+
+
         }
         else
         {

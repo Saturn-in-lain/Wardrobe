@@ -1,5 +1,7 @@
 package com.wardrob.wardrob.screens.mainscreen;
 
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
@@ -13,8 +15,12 @@ import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.adapter.SwipePagerAdapter;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 
-public class MainGlobalActivity extends AppCompatActivity
+import timber.log.Timber;
+
+public class MainGlobalActivity extends AppCompatActivity implements LocationListener
 {
+
+    TabLayout.Tab SettingsTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,7 +41,7 @@ public class MainGlobalActivity extends AppCompatActivity
         LooksItemsTab.setIcon(R.drawable.ic_menu_slideshow);
         tabLayout.addTab(LooksItemsTab);
 
-        TabLayout.Tab SettingsTab = tabLayout.newTab().setText(ResourcesGetterSingleton.getStr(R.string.tab_settings));
+        SettingsTab = tabLayout.newTab().setText(ResourcesGetterSingleton.getStr(R.string.tab_settings));
         SettingsTab.setIcon(R.drawable.ic_menu_share);
         tabLayout.addTab(SettingsTab);
 
@@ -86,4 +92,29 @@ public class MainGlobalActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //--------------------------------------------------------------------------------------------
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+        Timber.d("We have some issues here!!!");
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    //--------------------------------------------------------------------------------------------
 }

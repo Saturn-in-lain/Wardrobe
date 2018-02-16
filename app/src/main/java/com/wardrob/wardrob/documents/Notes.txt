@@ -10,9 +10,9 @@ Tasks:
 
     [+] Refactor UI approach to application
 
-    [-] Looks functionality
+    [+] Looks functionality
 
-    [-] Weather functionality
+    [+/-] Weather functionality
 
     [-] Help Screen
 
@@ -23,17 +23,17 @@ Tasks:
 ====================================================================================================
 Questions:
 
-    [-] How to draw preview picture for looks item?
+    [?] How to draw preview picture for looks item?
 
-    []
+    [?] How should WishList should look like?
+
+    [?] How Filters should look like?
 
 
 ====================================================================================================
 Bugs:
 
-    [-] Create/delete users
-
-    [-] Look create/delete/open
+    [-] Look -/delete/open
 
 
 ====================================================================================================

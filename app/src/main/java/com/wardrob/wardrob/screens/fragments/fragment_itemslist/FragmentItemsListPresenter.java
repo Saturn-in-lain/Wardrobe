@@ -49,10 +49,8 @@ public class FragmentItemsListPresenter
     public void getListOfRelatedItems()
     {
         UserObject activeUser = this.db.userDao().findActiveUser();
-
         List<ItemObject> items = this.db.itemDao().findItemsByCategoryAndUser(category,
                                                                         activeUser.getUserName());
-
         Point size = getGridDimensionParameters(items.size());
 
         for(int i=0, c = 0, r = 0;i<items.size();i++, c++)

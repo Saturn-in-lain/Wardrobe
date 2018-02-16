@@ -2,6 +2,7 @@ package com.wardrob.wardrob.screens.fragments.fragment_startup_creater;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,7 +23,9 @@ import android.widget.RadioGroup;
 import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.core.FileManagement;
 import com.wardrob.wardrob.core.GeneralActivity;
+import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.core.TakeImageHelper;
+import com.wardrob.wardrob.screens.fragments.fragment_startup.FragmentStartup;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,7 +52,7 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
     ImageView img_avatar;
     EditText edt;
     RadioGroup rgb;
-    private String path_to_picture;
+    private String path_to_picture = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -64,9 +67,13 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
         rgb = (RadioGroup) view.findViewById(R.id.rbgGender);
         Button bntSaveCreatedUser = (Button) view.findViewById(R.id.bntSaveCreatedUser);
 
+        //FragmentManager fm = getFragmentManager();
+
+
         if(null != getArguments())
         {
-            final Bitmap imageBitmap = BitmapFactory.decodeFile(getArguments().getString("img"));
+            path_to_picture = getArguments().getString("img");
+            final Bitmap imageBitmap = BitmapFactory.decodeFile(path_to_picture);
             img_avatar.setImageBitmap(imageBitmap);
             LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(DEFAULT_IMG_SIZE,
                                                                             DEFAULT_IMG_SIZE);
@@ -94,8 +101,9 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
                 gender = mRdBtnGenderSelection.getText().toString();
 
 
-                if (presenter.object != null) {
-                    presenter.saveNewMemberInDataBase(avatarName, gender);
+                if (path_to_picture != null)
+                {
+                    presenter.saveNewMemberInDataBase(avatarName, gender, path_to_picture);
                 }
                 else
                 {
@@ -150,9 +158,11 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
                 {
                     try
                     {
-                        byte[] imgData = FileManagement.getImageFileInByteArray(presenter.object.destination.getPath());
+                        path_to_picture = presenter.object.destination.getPath();
+                        byte[] imgData = FileManagement.getImageFileInByteArray(path_to_picture);
                         Bitmap imageBitmap = FileManagement.resizeImageForThumbnail(imgData);
                         img_avatar.setImageBitmap(imageBitmap);
+
                     }
                     catch (NullPointerException e){
                         Timber.e(e.toString());}
@@ -186,13 +196,11 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
                             File file = new File(presenter.object.destination.getPath());
                             presenter.object.destination = file;
 
-                            final Bitmap imageBitmap = BitmapFactory.decodeFile(presenter.object.destination.getAbsolutePath());
-                            img_avatar.setImageBitmap(imageBitmap);
-
-                            Timber.d("\n\nImage path to draw: %s", presenter.object.destination.getAbsolutePath());
-
                             path_to_picture = presenter.object.destination.getAbsolutePath();
 
+                            final Bitmap imageBitmap = BitmapFactory.decodeFile(path_to_picture);
+                            img_avatar.setImageBitmap(imageBitmap);
+                            Timber.d("\n\nImage path to draw: %s", path_to_picture);
                         }
                     }
                     else
@@ -209,7 +217,7 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
             img_avatar.setLayoutParams(parms);
             Timber.d("\n\nImage was set to layout here");
         }
-//       super.onActivityResult(requestCode, resultCode, data);
+        // super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -229,10 +237,18 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
     }
 
     @Override
-    public void closeActivity()
+    public void closeFragment()
     {
-        Timber.d("\n\n!!!!!!!!!!!!!closeActivity!!!!!!!!!!");
-        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+
+        FragmentStartup fr = new FragmentStartup();
+        Bundle args = new Bundle();
+        args.putString(ResourcesGetterSingleton.getStr(R.string.bundle_state), "user_available");
+        fr.setArguments(args);
+
+        fragmentTransaction.add(R.id.startup_container, fr , fr.getClass().getSimpleName());
+        fragmentTransaction.addToBackStack(this.getClass().getSimpleName());
+        fragmentTransaction.commitAllowingStateLoss();
     }
 
     @Override

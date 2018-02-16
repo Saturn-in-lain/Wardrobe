@@ -1,6 +1,8 @@
 package com.wardrob.wardrob.screens.fragments.fragment_startup_chooser;
 
+import android.app.FragmentTransaction;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -8,8 +10,10 @@ import android.widget.Toast;
 
 import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.core.FileManagement;
+import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.database.AppDatabase;
 import com.wardrob.wardrob.database.UserObject;
+import com.wardrob.wardrob.screens.fragments.fragment_startup.FragmentStartup;
 
 import java.io.File;
 import java.util.List;
@@ -75,6 +79,7 @@ public class FragmentStartupChooserPresenter
                                 Toast.LENGTH_LONG).show();
 
                         setUserAsActive(users.get(id));
+                        view.closeFragment();
                     }
                 });
 
@@ -106,6 +111,8 @@ public class FragmentStartupChooserPresenter
             this.view.getAvailableUsersLayout().addView(linearLayout);
         }
     }
+
+
 
     /**
      * Function: setUserAsActive()

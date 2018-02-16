@@ -36,6 +36,8 @@ public class TabFragmentLooksListPresenter
     {
         this.view = view;
         this.db = AppDatabase.getAppDatabase(this.view.getThis());
+
+        initLooksList();
     }
 
     public void initLooksList()
@@ -91,9 +93,10 @@ public class TabFragmentLooksListPresenter
                 public void onClick(View v)
                 {
                     String item_id = String.valueOf(item.getUid());
+                        Toast.makeText(v.getContext(),
+                                "Click item id = " + item_id,
+                                Toast.LENGTH_LONG).show();
 
-
-                    {
 //                        Intent intent = new Intent(view.getThis(), NewItemActivity.class);
 //                        HashMap<String, String> hashMap = new HashMap<>();
 //                        try
@@ -103,11 +106,7 @@ public class TabFragmentLooksListPresenter
 //                        catch (NumberFormatException nfe) {}
 //                        intent.putExtra(ResourcesGetterSingleton.getStr(R.string.bundle_hash), hashMap);
 //                        view.getThis().startActivity(intent);
-                    }
-                    //else
-                    {
-                        //
-                    }
+
                 }
             });
 
@@ -130,8 +129,8 @@ public class TabFragmentLooksListPresenter
         GridLayout.LayoutParams param = new GridLayout.LayoutParams();
         param.height = GridLayout.LayoutParams.WRAP_CONTENT;
         param.width  = GridLayout.LayoutParams.WRAP_CONTENT;
-        param.rightMargin = 5;
-        param.topMargin   = 5;
+        param.rightMargin = 25;
+        param.topMargin   = 25;
         param.setGravity(Gravity.CENTER);
         param.columnSpec = GridLayout.spec(col);
         param.rowSpec    = GridLayout.spec(row);

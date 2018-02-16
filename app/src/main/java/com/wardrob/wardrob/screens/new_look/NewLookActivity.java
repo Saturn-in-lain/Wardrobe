@@ -72,47 +72,60 @@ public class NewLookActivity extends AppCompatActivity implements NewLookView
 
         LookObject look = presenter.db.lookDao().findFinished(false);
 
-        int id = look.getLookUpperLevelObject();
+        setLookItems(look,"Upper Level",    imgUpperLevel);
+        setLookItems(look,"Lower level",    imgLowerLevel);
+        setLookItems(look,"Warm Clothes",   imgWarmLevel);
+        setLookItems(look,"Hats",           imgHat);
+        setLookItems(look,"Accessories",    imgAccessories);
+        setLookItems(look,"Boots",          imgBoots);
+
+        String name = look.getLookName();
+        if (null != name) { edtLookName.setText(name);}
+    }
+
+    /**
+     * Function: setLookItems
+     * @param look
+     * @param category
+     * @param img
+     */
+    private void setLookItems( LookObject look, String category, ImageView img )
+    {
+        int id = 0;
+
+        switch (category)
+        {
+            case "Upper Level":
+                id = look.getLookUpperLevelObject();
+                break;
+            case "Lower level":
+                id = look.getLookLowerLevelObject();
+                break;
+            case "Warm Clothes":
+                id = look.getLookWarmLevelObject();
+                break;
+            case "Hats":
+                id = look.getLookHatObject();
+                break;
+            case "Accessories":
+                id = look.getLookAccessoriesObject();
+                break;
+            case "Boots":
+                id = look.getLookBootsLevelObject();
+                break;
+            default:
+                break;
+        }
+
         if(id !=0)
         {
             ItemObject object = presenter.db.itemDao().findById(id);
             if (null != object)
             {
-                String category = object.getItemCategory();
-                if(null != category)
-                {
-                    Bitmap imageBitmap = BitmapFactory.decodeFile(object.getItemImageName());
-
-                    switch (category)
-                    {
-                        case "Upper Level":
-                            imgUpperLevel.setImageBitmap(imageBitmap);
-                            break;
-                        case "Lower level":
-                            imgLowerLevel.setImageBitmap(imageBitmap);
-                            break;
-                        case "Warm Clothes":
-                            imgWarmLevel.setImageBitmap(imageBitmap);
-                            break;
-                        case "Hats":
-                            imgHat.setImageBitmap(imageBitmap);
-                            break;
-                        case "Accessories":
-                            imgAccessories.setImageBitmap(imageBitmap);
-                            break;
-                        case "Boots":
-                            imgBoots.setImageBitmap(imageBitmap);
-                            break;
-                        default:
-                            Timber.e("Could not detect correct category");
-                            break;
-                    }
-                }
+                Bitmap imageBitmap = BitmapFactory.decodeFile(object.getItemImageName());
+                img.setImageBitmap(imageBitmap);
             }
         }
-
-        String name = look.getLookName();
-        if (null != name) { edtLookName.setText(name);}
     }
 
 

@@ -27,10 +27,14 @@ import com.wardrob.wardrob.database.ItemObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 public class NewItemActivity extends GeneralActivity implements NewItemView
 {
 
     NewItemPresenter presenter;
+
+    ItemObject item = null;
 
     ImageView cloth_img                 = null;
     ImageView default_category          = null;
@@ -45,6 +49,8 @@ public class NewItemActivity extends GeneralActivity implements NewItemView
     Spinner   sprWhiteningSelection     = null;
 
     CheckBox ckbxSecurity = null;
+
+    String category;
 
     final ArrayList<String> categoryList  = new ArrayList<>();
     final ArrayList<String> relationsList = new ArrayList<>();
@@ -69,7 +75,7 @@ public class NewItemActivity extends GeneralActivity implements NewItemView
                                             ResourcesGetterSingleton.getStr(R.string.bundle_hash));
 
         String id = hashMap.get(ResourcesGetterSingleton.getStr(R.string.bundle_id_item));
-        String category ;
+
 
         if (!id.equals("none"))
         {
@@ -77,7 +83,7 @@ public class NewItemActivity extends GeneralActivity implements NewItemView
             {
                 presenter = new NewItemPresenter(this, null);
                 Integer item_id = Integer.parseInt(id);
-                ItemObject item = presenter.getItem(item_id);
+                item = presenter.getItem(item_id);
                 loadUIElementsPerObject(item);
                 presenter = new NewItemPresenter(this, item.getItemMainCategory());
 
@@ -266,7 +272,7 @@ public class NewItemActivity extends GeneralActivity implements NewItemView
         // default_category      = (ImageView) findViewById(R.id.default_category);
         //---------------------------------------------------------------------------
         ckbxSecurity.setSelected(item.getItemVisibility());
-        default_category_name.setText(item.getItemCategory());
+        default_category_name.setText(item.getItemMainCategory());
         //---------------------------------------------------------------------------
         setSelectedItemInSpinner(item.getItemCategory(), sprCategorySelection,     categoryList);
         setSelectedItemInSpinner(item.getItemRelations(),sprRelationsSelection,    relationsList);
@@ -375,43 +381,90 @@ public class NewItemActivity extends GeneralActivity implements NewItemView
      */
     public void onSaveResults(View view)
     {
-        ItemObject object = new ItemObject();
 
-        object.setItemMainCategory(default_category_name.getText().toString());
+        if (null == item)
+        {
+            ItemObject object = new ItemObject();
 
-        EditText edtItemNaming = (EditText) findViewById(R.id.edtItemNaming);
-        object.setItemName(edtItemNaming.getText().toString());
+            object.setItemMainCategory(default_category_name.getText().toString());
 
-        object.setItemImageName(presenter.object.destination.getPath());
+            EditText edtItemNaming = (EditText) findViewById(R.id.edtItemNaming);
+            object.setItemName(edtItemNaming.getText().toString());
 
-        object.setItemCategory(sprCategorySelection.getSelectedItem().toString());
+            object.setItemImageName(presenter.object.destination.getPath());
+            object.setItemCategory(sprCategorySelection.getSelectedItem().toString());
 
-        object.setItemRelations(sprRelationsSelection.getSelectedItem().toString());
+            object.setItemRelations(sprRelationsSelection.getSelectedItem().toString());
 
-        ColorPickerView colorPicker = (ColorPickerView) findViewById(R.id.colorPicker);
-        object.setItemColor(colorPicker.getColor());
+            ColorPickerView colorPicker = (ColorPickerView) findViewById(R.id.colorPicker);
+            object.setItemColor(colorPicker.getColor());
 
-        EditText edtDateSet = (EditText) findViewById(R.id.edtDateSet);
-        object.setItemPurchaseData(edtDateSet.getText().toString());
+            EditText edtDateSet = (EditText) findViewById(R.id.edtDateSet);
+            object.setItemPurchaseData(edtDateSet.getText().toString());
 
-        EditText edtPrice = (EditText) findViewById(R.id.edtPrice);
-        object.setItemPrice(edtPrice.getText().toString());
+            EditText edtPrice = (EditText) findViewById(R.id.edtPrice);
+            object.setItemPrice(edtPrice.getText().toString());
 
-        RatingBar ratingBarWarmsLevel = (RatingBar) findViewById(R.id.ratingBarWarmsLevel);
-        object.setItemWarms(ratingBarWarmsLevel.getRating());
+            RatingBar ratingBarWarmsLevel = (RatingBar) findViewById(R.id.ratingBarWarmsLevel);
+            object.setItemWarms(ratingBarWarmsLevel.getRating());
 
-        RatingBar ratingBarAttitude = (RatingBar) findViewById(R.id.ratingBarAttitude);
-        object.setItemFavor(ratingBarAttitude.getRating());
+            RatingBar ratingBarAttitude = (RatingBar) findViewById(R.id.ratingBarAttitude);
+            object.setItemFavor(ratingBarAttitude.getRating());
 
-        CheckBox ckbxSecurity = (CheckBox) findViewById(R.id.ckbxSecurity);
-        object.setItemVisibility(ckbxSecurity.isChecked());
+            CheckBox ckbxSecurity = (CheckBox) findViewById(R.id.ckbxSecurity);
+            object.setItemVisibility(ckbxSecurity.isChecked());
 
-        object.setItemWashing1(sprWashingSelection.getSelectedItem().toString());
-        object.setItemWashing2(sprDrySelection.getSelectedItem().toString());
-        object.setItemWashing3(sprIroningSelection.getSelectedItem().toString());
-        object.setItemWashing4(sprProfCleaningSelection.getSelectedItem().toString());
+            object.setItemWashing1(sprWashingSelection.getSelectedItem().toString());
+            object.setItemWashing2(sprDrySelection.getSelectedItem().toString());
+            object.setItemWashing3(sprIroningSelection.getSelectedItem().toString());
+            object.setItemWashing4(sprProfCleaningSelection.getSelectedItem().toString());
 
-        presenter.saveItem(object);
+            presenter.saveItem(object);
+            Timber.d("Save item in database");
+        }
+        else
+        {
+            presenter.db.itemDao().delete(item);
+
+            item.setItemMainCategory(default_category_name.getText().toString());
+
+            EditText edtItemNaming = (EditText) findViewById(R.id.edtItemNaming);
+            item.setItemName(edtItemNaming.getText().toString());
+
+            if(null != presenter.object)
+                item.setItemImageName(presenter.object.destination.getPath());
+
+            item.setItemCategory(sprCategorySelection.getSelectedItem().toString());
+
+            item.setItemRelations(sprRelationsSelection.getSelectedItem().toString());
+
+            ColorPickerView colorPicker = (ColorPickerView) findViewById(R.id.colorPicker);
+            item.setItemColor(colorPicker.getColor());
+
+            EditText edtDateSet = (EditText) findViewById(R.id.edtDateSet);
+            item.setItemPurchaseData(edtDateSet.getText().toString());
+
+            EditText edtPrice = (EditText) findViewById(R.id.edtPrice);
+            item.setItemPrice(edtPrice.getText().toString());
+
+            RatingBar ratingBarWarmsLevel = (RatingBar) findViewById(R.id.ratingBarWarmsLevel);
+            item.setItemWarms(ratingBarWarmsLevel.getRating());
+
+            RatingBar ratingBarAttitude = (RatingBar) findViewById(R.id.ratingBarAttitude);
+            item.setItemFavor(ratingBarAttitude.getRating());
+
+            CheckBox ckbxSecurity = (CheckBox) findViewById(R.id.ckbxSecurity);
+            item.setItemVisibility(ckbxSecurity.isChecked());
+
+            item.setItemWashing1(sprWashingSelection.getSelectedItem().toString());
+            item.setItemWashing2(sprDrySelection.getSelectedItem().toString());
+            item.setItemWashing3(sprIroningSelection.getSelectedItem().toString());
+            item.setItemWashing4(sprProfCleaningSelection.getSelectedItem().toString());
+
+            presenter.replaceItem(item);
+            Timber.d("Replace item in database");
+        }
+
         finish();
     }
 

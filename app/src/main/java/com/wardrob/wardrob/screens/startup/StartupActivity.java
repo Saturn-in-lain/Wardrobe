@@ -22,7 +22,7 @@ public class StartupActivity extends GeneralActivity implements StartupView
 
     FragmentManager fragmentManager = getFragmentManager();
 
-    FragmentStartup         fragment_start   = new FragmentStartup();
+    FragmentStartup         fragment_start;
     FragmentStartupCreate   fragment_create  = new FragmentStartupCreate();
     FragmentStartupChooser  fragment_chooser = new FragmentStartupChooser();
 
@@ -74,10 +74,10 @@ public class StartupActivity extends GeneralActivity implements StartupView
     protected void onStart()
     {
         super.onStart();
-
-        //TODO: Need to check if activity available or there will be crash!!!
         defineUser();
     }
+
+
 
     /**
      * Function: defineUser
@@ -87,11 +87,10 @@ public class StartupActivity extends GeneralActivity implements StartupView
         Bundle args = new Bundle();
         if (presenter.isUsersPresentInDatabase())
         {
+            fragment_start   = new FragmentStartup();
             args.putString(ResourcesGetterSingleton.getStr(R.string.bundle_state), "user_available");
-
-            fragmentManager.beginTransaction().remove(fragment_start).commit(); //TODO: this is test idea
-
             fragment_start.setArguments(args);
+
             fragmentManager.beginTransaction()
                     .replace(R.id.startup_container, fragment_start)
                     .commit();
@@ -105,19 +104,14 @@ public class StartupActivity extends GeneralActivity implements StartupView
 
     }
 
-
     /**
      * Function: onChooseUser
      * @param view View
      */
     public void onChooseUser(View view)
     {
-        //Bundle args = new Bundle();
-        //args.putString(ResourcesGetterSingleton.getStr(R.string.bundle_state), "user_available");
-        //fragment.setArguments(args);
         fragmentManager.beginTransaction()
-                .replace(R.id.startup_container, fragment_chooser)
-                .commit();
+                .replace(R.id.startup_container, fragment_chooser).addToBackStack("chooser").commit();
     }
 
     /**
@@ -136,8 +130,6 @@ public class StartupActivity extends GeneralActivity implements StartupView
     {
         //super.onActivityResult(requestCode, resultCode, data);
         fragment_create.onActivityResult(requestCode, resultCode, data);
-        Timber.d("\n\ndetect!");
-
     }
 
     /**

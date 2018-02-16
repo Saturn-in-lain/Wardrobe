@@ -87,13 +87,24 @@ public class ItemsListActivity extends AppCompatActivity implements ItemsListVie
                 }
             });
         }
-        // --------------------------------------------------------------------------------------
+        setList();
+    }
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        setList();
+
+    }
+
+    private void setList()
+    {
         fragment = new FragmentItemsList();
         Bundle args = new Bundle();
 
         args.putInt(FragmentItemsList.IMAGE_RESOURCE_ID,
-                    R.drawable.shirt); //TODO: send correct image id to fragment here
+                R.drawable.shirt);                                                                      //TODO: send correct image id to fragment here
         args.putString(FragmentItemsList.ITEM_NAME,  CATEGORY);
         args.putString(FragmentItemsList.ITEM_STATE, STATE);
         fragment.setArguments(args);
@@ -101,11 +112,8 @@ public class ItemsListActivity extends AppCompatActivity implements ItemsListVie
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                        .replace(R.id.items_list_container, fragment)
-                        .commit();
-
-        // --------------------------------------------------------------------------------------
-
+                .replace(R.id.items_list_container, fragment)
+                .commit();
     }
 
     @Override

@@ -17,7 +17,10 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class NewItemPresenter
 {
@@ -26,7 +29,7 @@ public class NewItemPresenter
     public NewItemView view;
     public TakeImageHelper object;
 
-    private AppDatabase db   = null;
+    public AppDatabase db   = null;
 
     public NewItemPresenter(NewItemView view, String pathToFolder)
     {
@@ -91,12 +94,23 @@ public class NewItemPresenter
     }
 
     /**
+     * Function: replaceItem
+     * @param object ItemObject
+     */
+    public void replaceItem(ItemObject object)
+    {
+        UserObject activeUser = this.db.userDao().findActiveUser();
+        object.setUserName(activeUser.getUserName());
+        db.itemDao().insertAll(object);
+    }
+
+    /**
      * Function: getItem
+     * @param id
      */
     public ItemObject getItem(Integer id)
     {
-        ItemObject object = null;
-        object = db.itemDao().findById(id.intValue());
+        ItemObject object = db.itemDao().findById(id.intValue());
         return object;
     }
 }

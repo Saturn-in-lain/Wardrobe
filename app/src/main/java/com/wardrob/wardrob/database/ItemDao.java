@@ -26,7 +26,6 @@ public interface ItemDao
     @Query("SELECT * FROM item_table WHERE item_main_category LIKE :category AND user_name LIKE :user")
     List<ItemObject> findItemsByCategoryAndUser(String category, String user);
 
-
     @Insert
     void insertAll(ItemObject... item);
 

@@ -28,7 +28,7 @@
     <string name="login_create">                Create              </string>
 
     <!-- WARNINGS -->
-    <string name="warning_message">    Empty data in your profile   </string>
+    <string name="warning_message">   Name and gender should be defined! </string>
 
     <!-- 3 RED DOT MENUS -->
     <string name="action_settings">     Settings    </string>

@@ -272,7 +272,6 @@ public class MainGlobalActivity extends AppCompatActivity implements LocationLis
     }
 
     //--------------------------------------------------------------------------------------------
-
     @Override
     public void onLocationChanged(Location location)
     {
@@ -294,6 +293,7 @@ public class MainGlobalActivity extends AppCompatActivity implements LocationLis
     public void onProviderDisabled(String provider) {
 
     }
+    //--------------------------------------------------------------------------------------------
 
     /**
      *  Handle Response of selected file
@@ -312,7 +312,7 @@ public class MainGlobalActivity extends AppCompatActivity implements LocationLis
                     Timber.d("\t\t[REQUEST_CODE_OPENER]");
                     break;
 
-                case REQUEST_CODE_RESOLUTION:   // : //
+                case REQUEST_CODE_RESOLUTION:
                     Timber.d("\t\t[REQUEST_CODE_RESOLUTION]");
 
                     mFileId = (DriveId) data.getParcelableExtra(
@@ -322,6 +322,10 @@ public class MainGlobalActivity extends AppCompatActivity implements LocationLis
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
+
+
+                    Timber.d("\t\t[REQUEST_CODE_RESOLUTION]: URL -> " + url.toString());
+
                 break;
 
                 default:
@@ -356,7 +360,6 @@ public class MainGlobalActivity extends AppCompatActivity implements LocationLis
                     connectionResult.getErrorCode(), 0).show();
 
             Timber.d("\t\t[onConnectionFailed]-->[1]");
-
             return;
         }
 

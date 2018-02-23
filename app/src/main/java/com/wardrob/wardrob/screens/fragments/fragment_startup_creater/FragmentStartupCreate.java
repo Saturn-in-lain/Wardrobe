@@ -128,7 +128,6 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-
         change_fragment=true;
 
         if (resultCode == RESULT_OK)

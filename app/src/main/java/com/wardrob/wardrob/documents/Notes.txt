@@ -12,11 +12,17 @@ Tasks:
 
     [+] Looks functionality
 
-    [+/-] Weather functionality
+    [+] Weather functionality
 
     [-] Help Screen
 
-    [-] Sync database and pictures to Google account (Google Drive)
+    [+/-] Sync database and pictures to Google account (Google Drive)
+-> https://developers.google.com/drive/android/examples/ Here is
+-> https://github.com/googledrive/android-demos
+
+Examples:
+https://www.numetriclabz.com/integrate-google-drive-in-android-tutorial/
+https://github.com/googledrive/android-demos/tree/master/app/src
 
     [-] Testing
 
@@ -33,7 +39,9 @@ Questions:
 ====================================================================================================
 Bugs:
 
-    [-] Look -/delete/open
+    [-] Look -/-/open
+
+
 
 
 ====================================================================================================

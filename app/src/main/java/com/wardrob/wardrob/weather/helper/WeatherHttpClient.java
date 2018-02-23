@@ -11,49 +11,54 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import timber.log.Timber;
+
 public class WeatherHttpClient
 {
 
     private static String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
-
+                                                    //706483 - Kharkiv
     /**
      * Function: getWeatherData
      * Description:
-     * @param location
+     * @param url
      * @return
      */
-    public String getWeatherData(String location)
+    public String getWeatherData(String url)
     {
         HttpURLConnection con = null;
         InputStream is = null;
 
         try
         {
-            con = (HttpURLConnection) (new URL(Common.BASE_URL + location)).openConnection();
+            con = (HttpURLConnection) (new URL(url)).openConnection();
             try
             {
                 if (con.getResponseCode() == 200)
                 {
+                    //con.setDoInput(true);
                     con.setRequestMethod("GET");
-                    con.setDoInput(true);
-                    con.setDoOutput(true);
+                    //con.setDoOutput(true);
                     con.connect();
-
 
                     // Let's read the response
                     StringBuffer buffer = new StringBuffer();
                     is = con.getInputStream();
                     BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                    String line = null;
-                    while ((line = br.readLine()) != null)
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        //buffer.append(line);
                         buffer.append(line + "rn");
+                    }
 
                     is.close();
                     con.disconnect();
                     return buffer.toString();
-
                 }
-
+                else
+                {
+                    Timber.d("Response was not 200 :(");
+                }
             }
             catch (ProtocolException e) {e.printStackTrace();}
             catch (IOException e) {e.printStackTrace();}

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.GridView;
 
 import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
@@ -54,15 +55,23 @@ public class TabFragmentLooksList extends Fragment implements TabFragmentLooksLi
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+        presenter.refreshLooksList();
+    }
+
+    @Override
     public Context getThis()
     {
         return getContext();
     }
 
+
     @Override
-    public GridLayout getGridLayout()
+    public GridView getGridView()
     {
-        return (GridLayout) view.findViewById(R.id.rltListOfLooks);
+        return (GridView) view.findViewById(R.id.rltListOfLooks);
     }
 
     @Override

@@ -4,6 +4,8 @@ import android.content.Intent;
 import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.database.AppDatabase;
+import com.wardrob.wardrob.database.ItemObject;
+import com.wardrob.wardrob.database.LookObject;
 import com.wardrob.wardrob.screens.listscreen.ItemsListActivity;
 
 import java.util.HashMap;
@@ -35,4 +37,13 @@ public class NewLookPresenter
         view.getThis().startActivity(intent);
     }
 
+    /**
+     * Function: getLookItem
+     * @param id
+     */
+    public LookObject getLookItem(Integer id)
+    {
+        LookObject object = db.lookDao().findById(id.intValue());
+        return object;
+    }
 }

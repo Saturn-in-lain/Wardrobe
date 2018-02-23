@@ -5,15 +5,15 @@ package com.wardrob.wardrob.weather.model;
  */
 public class Coord
 {
-    private int lon;
+    private double lon;
 
-    public int getLon() { return this.lon; }
+    public double getLon() { return this.lon; }
 
-    public void setLon(int lon) { this.lon = lon; }
+    public void setLon(double lon) { this.lon = lon; }
 
-    private int lat;
+    private double lat;
 
-    public int getLat() { return this.lat; }
+    public double getLat() { return this.lat; }
 
-    public void setLat(int lat) { this.lat = lat; }
+    public void setLat(double lat) { this.lat = lat; }
 }

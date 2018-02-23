@@ -20,7 +20,8 @@
         tools:layout_editor_absoluteX="153dp" />
 
     <RelativeLayout
-        android:layout_width="352dp"
+        android:id="@+id/relativeLayout"
+        android:layout_width="353dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -50,13 +51,24 @@
             android:layout_alignLeft="@id/condIcon"
             android:layout_below="@id/condIcon" />
 
+
+        <TextView
+            android:id="@+id/tempLab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/temp"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/condDescr"
+            android:text="Temperature" />
+
         <TextView
             android:id="@+id/temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/condDescr"
-            android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@id/condDescr" />
+            android:layout_alignBaseline="@+id/condDescr"
+            android:layout_alignBottom="@+id/condDescr"
+            android:layout_marginStart="12dp"
+            android:layout_toEndOf="@+id/tempLab" />
 
         <TextView
             android:id="@+id/pressLab"
@@ -114,5 +126,27 @@
             android:layout_marginLeft="4dp"
             android:layout_toRightOf="@id/windSpeed" />
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/createfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Create a file on Google Drive"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        android:onClick="onClickCreate"/>
+
+    <Button
+        android:id="@+id/openfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Open file from Google Drive"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createfile"
+        android:onClick="onClickOpen"/>
 
 </android.support.constraint.ConstraintLayout>

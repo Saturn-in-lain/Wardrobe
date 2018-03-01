@@ -1,9 +1,43 @@
 ====================================================================================================
 ==================                                                                ==================
 ====================================================================================================
+Google API temp data:
+
+Alias: key0
+MD5: 75:04:93:45:E1:44:AA:7F:68:97:28:9F:42:3F:A0:71
+SHA1: 56:84:7D:07:29:84:9F:E9:A1:77:1F:19:37:D8:39:58:50:93:15:E0
+
+Клиент OAuth
+932805877006-alnao7lkc6nek8u2upfme2sqcb3e3jor.apps.googleusercontent.com
+
+https://github.com/Jorgesys/Android-Google-Drive/blob/master/app/src/main/java/com/jorgesys/googledrive/MainActivity.java
 
 
+-> https://developers.google.com/drive/android/examples/ Here is
+-> https://github.com/googledrive/android-demos
+--> https://www.numetriclabz.com/integrate-google-drive-in-android-tutorial/
+--> https://github.com/googledrive/android-demos/tree/master/app/src
 
+[Paces detection]
+https://developers.google.com/places/android-api/placepicker?hl=ru
+
+Saving db should be Async...
+https://android-developers.googleblog.com/2014/02/new-client-api-model-in-google-play.html
+
+[MOST FULL EXAMPLE]
+https://github.com/googledrive/android-demos/tree/master/app/src/main/java/com/google/android/gms/drive/sample/demo
+
+====================================================================================================
+
+[Tryit!]
+Snackbar snackbar =  Snackbar.make(findViewById(android.R.id.content),
+                                "Photo succesfully saved to Google Drive!", Snackbar.LENGTH_LONG)
+                                .setActionTextColor(Color.RED);
+        View snackbarView = snackbar.getView();
+        snackbarView.setBackgroundColor(Color.DKGRAY);
+        TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.YELLOW);
+        snackbar.show();
 
 ====================================================================================================
 Tasks:
@@ -17,33 +51,29 @@ Tasks:
     [-] Help Screen
 
     [+/-] Sync database and pictures to Google account (Google Drive)
--> https://developers.google.com/drive/android/examples/ Here is
--> https://github.com/googledrive/android-demos
-
-Examples:
-https://www.numetriclabz.com/integrate-google-drive-in-android-tutorial/
-https://github.com/googledrive/android-demos/tree/master/app/src
 
     [-] Testing
 
 ====================================================================================================
 Questions:
 
-    [?] How to draw preview picture for looks item?
+    [?] How to draw preview picture for looks item? -> Additional feature
 
     [?] How should WishList should look like?
 
-    [?] How Filters should look like?
+    [?] How Filters should look like?  -> real module probably
 
+    [?] GOOGLE API KEY protection:
+            https://www.androidauthority.com/how-to-hide-your-api-key-in-android-600583/
 
+    [?]
 ====================================================================================================
 Bugs:
 
     [-] Look -/-/open
 
-
-
-
 ====================================================================================================
 
 
+[This one can be investigated to ;earn more great practices]
+https://www.programcreek.com/java-api-examples/?code=etsy/divertsy-client/divertsy-client-master/divertsy_client/src/

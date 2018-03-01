@@ -14,14 +14,19 @@ public abstract class AppDatabase extends RoomDatabase
     public abstract UserDao userDao();
     public abstract LookDao lookDao();
 
+    private static String database = "item-database";
+    public static Context ctx;
+
+
     public static AppDatabase getAppDatabase(Context context)
     {
         if (INSTANCE == null)
         {
+            ctx = context;
             INSTANCE =
                     Room.databaseBuilder(context.getApplicationContext(),
                                          AppDatabase.class,
-                                         "item-database").allowMainThreadQueries().build();
+                                        database).allowMainThreadQueries().build();
         }
         return INSTANCE;
     }
@@ -31,18 +36,14 @@ public abstract class AppDatabase extends RoomDatabase
         INSTANCE = null;
     }
 
-}
 
-// -------------------------------------------------------------------------------------------------
-//    private static User addUser(final AppDatabase db, User user) {
-//        db.userDao().insertAll(user);
-//        return user;
-//    }
-//
-//    private static void populateWithTestData(AppDatabase db) {
-//        User user = new User();
-//        user.setFirstName("Ajay");
-//        user.setLastName("Saini");
-//        user.setAge(25);
-//        addUser(db, user);
-//    }
+    /**
+     * Function: getDataBasePath
+     * @return: currentDBPath
+     */
+    public String getDataBasePath()
+    {
+        String currentDBPath = ctx.getDatabasePath(database+".db").getAbsolutePath();
+        return currentDBPath;
+    }
+}

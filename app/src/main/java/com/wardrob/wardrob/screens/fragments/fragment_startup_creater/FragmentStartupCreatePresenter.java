@@ -17,14 +17,18 @@ import com.wardrob.wardrob.database.UserObject;
 
 import java.io.File;
 
+import timber.log.Timber;
+
 public class FragmentStartupCreatePresenter
 {
     FragmentStartupCreateView view = null;
     public TakeImageHelper object;
+    AppDatabase db;
 
     public FragmentStartupCreatePresenter(FragmentStartupCreateView view)
     {
         this.view = view;
+        db = AppDatabase.getAppDatabase(view.getThis());
     }
 
 
@@ -42,19 +46,11 @@ public class FragmentStartupCreatePresenter
                     Toast.makeText(view.getThis(), "All information is correct", Toast.LENGTH_LONG).show();
                     addUserInSystem(avatarName, gender, avatar_file);
                     this.view.closeFragment();
-
-//                    FragmentTransaction fragmentTransaction = this.view.getFragmentManager().beginTransaction();
-//                    fragmentTransaction.replace(R.id.fra, fr);
-//                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//                    fragmentTransaction.commit();
-
-
             }
-
-
         }
         else
         {
+            Timber.d(String.format("\n\n avatarName=[%s] gender=[%s]", avatarName, gender));
             setAlarmDialog();
         }
     }
@@ -85,8 +81,6 @@ public class FragmentStartupCreatePresenter
      */
     private void addUserInSystem(String avatarName, String avatarGender, String imagePath)
     {
-        AppDatabase db = AppDatabase.getAppDatabase(view.getThis());
-
         db.userDao().resetAllActive();
 
         UserObject user = new UserObject();
@@ -95,6 +89,18 @@ public class FragmentStartupCreatePresenter
         user.setUserImageName(imagePath);
         user.setIsActive(1);
         db.userDao().insertAll(user);
+    }
+
+    /**
+     * Function: isActiveUserExist
+     * TODO: common method and should be some where common
+     */
+    public boolean isActiveUserExist()
+    {
+        boolean userPresent = true;
+        UserObject activeUser = db.userDao().findActiveUser();
+        if(null == activeUser){ userPresent = false;}
+        return userPresent;
     }
 
     /**

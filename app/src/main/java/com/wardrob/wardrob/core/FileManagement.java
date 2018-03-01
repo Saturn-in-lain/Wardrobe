@@ -1,8 +1,10 @@
 package com.wardrob.wardrob.core;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Path;
+import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.wardrob.wardrob.R;
@@ -191,7 +193,17 @@ public class FileManagement
         {
             pdata = new FileInputStream(imgFile);
         }
-        catch (FileNotFoundException e1){e1.printStackTrace(); }
+        catch (FileNotFoundException e1)
+        {
+            e1.printStackTrace();
+
+            //----------------------------------------------------------------------
+            //TODO: Place here default login image
+            Uri path = Uri.parse(ANDROID_RESOURCE + "com.wardrob.wardrob" +
+                    FORESLASH + R.drawable.default_logo_1);
+            Timber.e("\t\t PATH:" + path.getPath().toString());
+            //----------------------------------------------------------------------
+        }
 
         try
         {
@@ -201,6 +213,9 @@ public class FileManagement
 
         return imgData;
     }
+
+    public static final String ANDROID_RESOURCE = "android.resource://";
+    public static final String FORESLASH = "/";
 
     /**
      * Function: resizeImageForThumbnail

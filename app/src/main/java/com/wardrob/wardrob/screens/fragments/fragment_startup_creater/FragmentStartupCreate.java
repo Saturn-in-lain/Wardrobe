@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.BuildConfig;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.wardrob.wardrob.core.FileManagement;
 import com.wardrob.wardrob.core.GeneralActivity;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.core.TakeImageHelper;
+import com.wardrob.wardrob.database.UserObject;
 import com.wardrob.wardrob.screens.fragments.fragment_startup.FragmentStartup;
 
 import java.io.File;
@@ -107,7 +109,8 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
                 }
                 else
                 {
-                    presenter.setAlarmDialog();
+                    Uri path = Uri.parse("android.resource://"+ BuildConfig.APPLICATION_ID+"/" + R.drawable.default_logo_1);
+                    presenter.saveNewMemberInDataBase(avatarName, gender, path.toString());
                 }
             }
         });
@@ -266,8 +269,17 @@ public class FragmentStartupCreate extends Fragment implements FragmentStartupCr
             args.putString("gender", index.toString());
             fragment.setArguments(args);
             //-------------------------------------------------------------------------------------
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.startup_container, fragment).commit();
+            if(presenter.isActiveUserExist())
+            {
+                try
+                {
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.startup_container, fragment).commit();
+                }
+                catch (IllegalStateException e)
+                {Timber.e(e.toString());}
+            }
+            //-------------------------------------------------------------------------------------
         }
         super.onStop();
     }

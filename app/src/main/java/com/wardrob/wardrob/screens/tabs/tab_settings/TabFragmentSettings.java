@@ -57,21 +57,31 @@ public class TabFragmentSettings extends Fragment implements TabFragmentSettings
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.tab_fragment_settings, container, false);
-
         context = view.getContext();
 
         initUIElements();
 
+        checkPermissions();
+
+
         locationManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
-
-        Timber.d("Provide: " + provider.toString());
-
-        checkPermissions();
-        Location location = locationManager.getLastKnownLocation(provider);
-        if(null == location){Timber.d("No location found");}
-        onLocationChanged(location);
-
+        if(null != provider)
+        {
+            Timber.d("Provide: " + provider.toString());
+            Location location = locationManager.getLastKnownLocation(provider);
+            if (null == location)
+            {
+                Timber.d("No location found");
+            }
+            onLocationChanged(location);
+        }
+        else
+        {
+            //TODO: Here is huck to location debugging for now. Later should be some
+            //TODO: variant to choose your location by town list or so...
+            onLocationChanged(null);
+        }
         return view;
     }
 
@@ -97,7 +107,8 @@ public class TabFragmentSettings extends Fragment implements TabFragmentSettings
     {
         super.onResume();
         checkPermissions();
-        locationManager.requestLocationUpdates(provider,400,1,this);
+        if(null != provider)
+            locationManager.requestLocationUpdates(provider,400,1,this);
     }
 
     /**

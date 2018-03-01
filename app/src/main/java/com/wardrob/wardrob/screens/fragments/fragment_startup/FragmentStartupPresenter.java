@@ -15,7 +15,6 @@ import timber.log.Timber;
 
 public class FragmentStartupPresenter
 {
-
     FragmentStartupView view;
     private AppDatabase db = null;
 
@@ -24,7 +23,6 @@ public class FragmentStartupPresenter
         this.view = v;
         this.db = AppDatabase.getAppDatabase(this.view.getThis());
     }
-
 
     /**
      * Function: setActiveUser
@@ -45,11 +43,9 @@ public class FragmentStartupPresenter
             {
                 byte[] imgData = FileManagement.getImageFileInByteArray(activeUser.getUserImageName());
                 Bitmap imageBitmap = FileManagement.resizeImageForThumbnail(imgData);
-
                 image_logo.setImageBitmap(imageBitmap);
             }
-            catch (NullPointerException e) {
-                Timber.e(e.toString());}
+            catch (NullPointerException e) {Timber.e(e.toString());}
         }
     }
 

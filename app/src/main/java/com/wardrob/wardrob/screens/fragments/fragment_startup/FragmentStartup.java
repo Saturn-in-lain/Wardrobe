@@ -27,11 +27,8 @@ public class FragmentStartup extends Fragment implements FragmentStartupView
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.fragment_startup,
-                container,
-                false);
-
+                                container,false);
         presenter = new FragmentStartupPresenter(this);
-
         status = getArguments().getString(ResourcesGetterSingleton.getStr(R.string.bundle_state));
 
         Button login_button = (Button) view.findViewById(R.id.login_button);
@@ -67,9 +64,6 @@ public class FragmentStartup extends Fragment implements FragmentStartupView
                 view.getContext().startActivity(intent);
             }
         });
-
-
-
         return view;
     }
 

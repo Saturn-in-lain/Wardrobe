@@ -6,12 +6,11 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 
 
-public interface TabFragmentLooksListView {
+public interface TabFragmentLooksListView
+{
     Context getThis();
-
-//    GridLayout getGridLayout();
 
     GridView getGridView();
 
-    Activity getCurrentActivity();
+    Activity getCurrentActivity(); //TODO: Remove if no need!
 }

@@ -2,7 +2,9 @@
     <string name="app_name">Wardrobe</string>
     <string name="android_studio">Android Studio</string>
 
-    <string name="API_KEY">AIzaSyD3Vr2FE1HaXh4UDuein3dFsqN911nVNrc</string>
+    <string name="API_KEY">AIzaSyAttIS0i2pZeLWqGO8tagGiEFWBKask7-s</string>
+    <string name="API_WEB_CLIENT_ID">932805877006-ppb73od2anbs70thp7rde59s44se9flk.apps.googleusercontent.com</string>
+
     <!--<string name="API_KEY">AIzaSyD4O46GiNuMntYv10JrSGT1zm5B_Yxbdsw</string>-->
     <!--<string name="API_KEY">AIzaSyD5udz3Az81Ar5V0b_S52QEdx1uBpFfjvw</string>-->
 
@@ -163,6 +165,5 @@
     <string name="look_type_name_of_your_new_look">Type name of your new look</string>
     <string name="select_file">Select file</string>
     <string name="select_folder">Select folder</string>
-
 
 </resources>

@@ -183,13 +183,17 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
                     new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                             .requestScopes(Drive.SCOPE_FILE)
                             .requestScopes(Drive.SCOPE_APPFOLDER)
-                            //.requestIdToken("932805877006-ppb73od2anbs70thp7rde59s44se9flk.apps.googleusercontent.com")
-                            .requestServerAuthCode("932805877006-ppb73od2anbs70thp7rde59s44se9flk.apps.googleusercontent.com")
+                            .requestIdToken(getString(R.string.API_WEB_CLIENT_ID))                  // TEST
+                            .requestServerAuthCode(getString(R.string.API_WEB_CLIENT_ID))           // TEST
                             .build();
-            GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, signInOptions);
+
+            GoogleSignInClient googleSignInClient =
+                    GoogleSignIn.getClient(this, signInOptions);
+
             startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
 
             Timber.d("\t\t -signIn-> Signing with chooser of account");
+            //932805877006-s0pm7ddv3hps2r28i3fb6td37efof7lg.apps.googleusercontent.com
         }
     }
 

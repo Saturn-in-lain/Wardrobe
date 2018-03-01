@@ -52,6 +52,14 @@ Tasks:
 
     [+/-] Sync database and pictures to Google account (Google Drive)
 
+    [-] Sorting/Filtering functionality
+
+    [-] Wish lists functionality
+
+    [-] Fuzzy logic functionality
+
+    [-] Develop UI for all features
+
     [-] Testing
 
 ====================================================================================================
@@ -75,5 +83,5 @@ Bugs:
 ====================================================================================================
 
 
-[This one can be investigated to ;earn more great practices]
+[This one can be investigated to learn more great practices]
 https://www.programcreek.com/java-api-examples/?code=etsy/divertsy-client/divertsy-client-master/divertsy_client/src/

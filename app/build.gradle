@@ -4,58 +4,61 @@ android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig
-    {
-        applicationId "com.wardrob.wardrob"
-        minSdkVersion 23
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        project.ext.set("archivesBaseName", "Wardrobe-" + defaultConfig.versionName)
-    }
+            {
+                applicationId "com.wardrob.wardrob"
+                minSdkVersion 23
+                targetSdkVersion 25
+                versionCode 1
+                versionName "1.0"
+                testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+                project.ext.set("archivesBaseName", "Wardrobe-" + defaultConfig.versionName)
+            }
 
     signingConfigs
             {
                 debug
-                {
-                    storeFile file("C:\\Workspase\\Wardrobe\\keystore.jks")
-                    storePassword "555147"
-                    keyAlias "key0"
-                    keyPassword "555147"
-                }
+                        {
+                            storeFile file("C:\\Workspase\\Wardrobe\\keystore.jks")
+                            storePassword "555147"
+                            keyAlias "key0"
+                            keyPassword "555147"
+                        }
                 key0
-                {
-                    storeFile file("C:\\Workspase\\Wardrobe\\keystore.jks")
-                    storePassword project.property("MyApp.signing.password")
-                    keyAlias project.property("MyApp.signing.alias")
-                    keyPassword project.property("MyApp.signing.password")
-                }
+                        {
+                            storeFile file("C:\\Workspase\\Wardrobe\\keystore.jks")
+                            storePassword project.property("MyApp.signing.password")
+                            keyAlias project.property("MyApp.signing.alias")
+                            keyPassword project.property("MyApp.signing.password")
+                        }
             }
 
     buildTypes
-    {
-        release
-        {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationIdSuffix 'release.wardrobe'
-        }
-        customDebugType
-                {
+            {
+                release
+                        {
+                            minifyEnabled false
+                            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                            applicationIdSuffix 'release.wardrobe'
+                        }
+                customDebugType
+                        {
+                            debuggable true
+                            jniDebuggable true
+                            applicationIdSuffix 'debug.mode.wardrobe'
+                        }
+                debug {
                     debuggable true
                     jniDebuggable true
-                    applicationIdSuffix 'debug.mode.wardrobe'
+                    renderscriptDebuggable true
+                    applicationIdSuffix 'debug.wardrobe'
                 }
-        debug {
-            debuggable true
-            jniDebuggable true
-            renderscriptDebuggable true
-            applicationIdSuffix 'debug.wardrobe'
-        }
-    }
+            }
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
+
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -71,6 +74,13 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
+
     compile 'com.google.android.gms:play-services-drive:11.8.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'com.google.firebase:firebase-core:11.8.0'
+    compile 'com.google.android.gms:play-services:11.8.0'
+
 }
+
+
+apply plugin: 'com.google.gms.google-services'

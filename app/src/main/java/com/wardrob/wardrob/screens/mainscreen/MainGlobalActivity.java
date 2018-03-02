@@ -213,6 +213,7 @@ public class MainGlobalActivity extends BaseDemoActivity implements LocationList
     protected void onDriveClientReady()
     {
         Timber.d("\t\t\t<---[onDriveClientReady]--->");
+
     }
     //--------------------------------------------------------------------------------------------
 }

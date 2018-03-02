@@ -76,12 +76,18 @@ Questions:
 
     [?]
 ====================================================================================================
-Bugs:
+Bugs/Issues:
 
     [-] Look -/-/open
 
+    [+] Check if Wifi available in case we need to get correct behaviour -> isDeviceOnline
+
+    [-] Check settings to switch off Timber in case signing version
 ====================================================================================================
 
 
 [This one can be investigated to learn more great practices]
 https://www.programcreek.com/java-api-examples/?code=etsy/divertsy-client/divertsy-client-master/divertsy_client/src/
+
+[Custom dialog for filtering]
+https://stackoverflow.com/questions/13341560/how-to-create-a-custom-dialog-box-in-android

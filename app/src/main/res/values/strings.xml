@@ -68,7 +68,7 @@
     <string name="item_relation">        Relation                   </string>
 
     <!-- PATH -->
-    <string name="path_main">/sdcard/Wardrobe/</string>
+    <string name="path_main">           /sdcard/Wardrobe/</string>
     <string name="path_upper_outfit">   upper_outfit    </string>
     <string name="path_lower_outfit">   lower_outfit    </string>
     <string name="path_outerwear">      outerwear       </string>
@@ -78,12 +78,12 @@
     <string name="path_users">          users           </string>
 
     <!-- PERMISSIONS -->
-    <string name="persmission_camera">Camera</string>
-    <string name="persmission_read_external_storage">Read External Storage</string>
-    <string name="persmission_write_external_storage">Write External Storage</string>
-    <string name="persmission_message_granting">You need to grant access to</string>
-    <string name="persmission_ok">OK</string>
-    <string name="persmission_cancel">Cancel</string>
+    <string name="persmission_camera">                  Camera                      </string>
+    <string name="persmission_read_external_storage">   Read External Storage       </string>
+    <string name="persmission_write_external_storage">  Write External Storage      </string>
+    <string name="persmission_message_granting">        You need to grant access to </string>
+    <string name="persmission_ok">                      OK                          </string>
+    <string name="persmission_cancel">                  Cancel                      </string>
 
     <!-- ITEMS CATEGORY -->
     <string name="category_none">           None            </string>
@@ -93,7 +93,6 @@
     <string name="category_winter">         Winter          </string>
     <string name="category_spring_summer">  Summer-Spring   </string>
     <string name="category_winter_autumn">  Winter-Autumn   </string>
-
 
     <!-- ITEMS RELATIONS -->
     <string name="relations_casual">    Casual      </string>
@@ -154,16 +153,19 @@
     <string name="whitening_4"> Chlorine not allowed </string>
 
     <!-- LOGIN CHOOSER-->
-    <string name="add_to_family">Add to family</string>
-    <string name="login_chooser_name">Name</string>
-    <string name="login_chooser_save">Save</string>
+    <string name="add_to_family">       Add to family   </string>
+    <string name="login_chooser_name">  Name            </string>
+    <string name="login_chooser_save">  Save            </string>
+
+    <!-- GOOGLE SYNC -->
+    <string name="google_folder">  Wardrobe  </string>
 
     <!-- JUNK -->
-    <string name="new_item_default_category">Default category</string>
-    <string name="navigation_drawer_open">open</string>
-    <string name="navigation_drawer_close">close</string>
-    <string name="look_type_name_of_your_new_look">Type name of your new look</string>
-    <string name="select_file">Select file</string>
-    <string name="select_folder">Select folder</string>
+    <string name="new_item_default_category">       Default category            </string>
+    <string name="navigation_drawer_open">          open                        </string>
+    <string name="navigation_drawer_close">         close                       </string>
+    <string name="look_type_name_of_your_new_look"> Type name of your new look  </string>
+    <string name="select_file">                     Select file                 </string>
+    <string name="select_folder">                   Select folder               </string>
 
 </resources>

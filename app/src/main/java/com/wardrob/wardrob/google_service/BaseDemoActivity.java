@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.wardrob.wardrob.R;
+import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -72,6 +73,9 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
      */
     private TaskCompletionSource<DriveId> mOpenItemTaskSource;
 
+    /**
+     * Presenter
+     */
     BaseDemoPresenter presenter;
 
     /**
@@ -91,7 +95,28 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
 
         presenter = new BaseDemoPresenter(this);
 
+        connectAPIClient();
+
         signIn();
+
+        backupInitialization();
+    }
+
+    /**
+     * Function: backupInitialization
+     */
+    private void backupInitialization()
+    {
+        //Step: 1 - Create if not exist
+        presenter.createFolderOnGoogleDrive(null);
+
+        if(null != mGoogleApiClient)
+            presenter.check_folder_exists(ResourcesGetterSingleton.getStr(R.string.google_folder));
+        else
+            Timber.e("\n\t\t WE HAVE NOT GET mGoogleApiClient");
+
+        //Step: 2 - Save database file
+        //presenter.saveFileOnGoogleDrive();
     }
 
     /**
@@ -194,6 +219,7 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
 
             Timber.d("\t\t -signIn-> Signing with chooser of account");
             //932805877006-s0pm7ddv3hps2r28i3fb6td37efof7lg.apps.googleusercontent.com
+
         }
     }
 
@@ -208,60 +234,7 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
         onDriveClientReady();
     }
 
-    /**
-     * Prompts the user to select a text file using OpenFileActivity.
-     *
-     * @return Task that resolves with the selected item's ID.
-     */
-    protected Task<DriveId> pickTextFile()
-    {
-        OpenFileActivityOptions openOptions =
-                new OpenFileActivityOptions.Builder()
-                        .setSelectionFilter(Filters.eq(SearchableField.MIME_TYPE, "text/plain"))
-                        .setActivityTitle(getString(R.string.select_file))
-                        .build();
-        return pickItem(openOptions);
-    }
 
-    /**
-     * Prompts the user to select a folder using OpenFileActivity.
-     *
-     * @return Task that resolves with the selected item's ID.
-     */
-    protected Task<DriveId> pickFolder()
-    {
-        OpenFileActivityOptions openOptions =
-                new OpenFileActivityOptions.Builder()
-                        .setSelectionFilter(
-                                Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE))
-                        .setActivityTitle(getString(R.string.select_folder))
-                        .build();
-        return pickItem(openOptions);
-    }
-
-    /**
-     * Prompts the user to select a folder using OpenFileActivity.
-     *
-     * @param openOptions Filter that should be applied to the selection
-     * @return Task that resolves with the selected item's ID.
-     */
-    private Task<DriveId> pickItem(OpenFileActivityOptions openOptions)
-    {
-        mOpenItemTaskSource = new TaskCompletionSource<>();
-        getDriveClient()
-                .newOpenFileActivityIntentSender(openOptions)
-                .continueWith(new Continuation<IntentSender, Void>()
-                {
-                    @Override
-                    public Void then(@NonNull Task<IntentSender> task) throws Exception {
-                        startIntentSenderForResult(
-                                task.getResult(), REQUEST_CODE_OPEN_ITEM,
-                                null, 0, 0, 0);
-                        return null;
-                    }
-                });
-        return mOpenItemTaskSource.getTask();
-    }
 
     /**
      * Shows a toast message.
@@ -278,6 +251,7 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
      * TODO: may be needed
      * @return:
      */
+    @Override
     public GoogleApiClient getGoogleApiClient()
     {
         return mGoogleApiClient;
@@ -285,11 +259,8 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
 
     private void connectAPIClient()
     {
-        if (mGoogleApiClient == null) {
-            // Create the API client and bind it to an instance variable.
-            // We use this instance as the callback for connection and connection
-            // failures.
-            // Since no account name is passed, the user is prompted to choose.
+        if (mGoogleApiClient == null)
+        {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Drive.API)
                     .addScope(Drive.SCOPE_FILE)
@@ -298,9 +269,10 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
                     .addOnConnectionFailedListener(this)
                     .build();
         }
-        // Connect the client. Once connected, the camera is launched.
         mGoogleApiClient.connect();
     }
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
     @Override
     public void onConnectionFailed(ConnectionResult result)
@@ -352,8 +324,39 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
         return mDriveClient;
     }
 
-    protected DriveResourceClient getDriveResourceClient()
+    @Override
+    public DriveResourceClient getDriveResourceClient()
     {
         return mDriveResourceClient;
+    }
+
+    public TaskCompletionSource<DriveId> getItemTaskSource()
+    {
+        return mOpenItemTaskSource;
+    }
+
+    /**
+     * Prompts the user to select a folder using OpenFileActivity.
+     *
+     * @param openOptions Filter that should be applied to the selection
+     * @return Task that resolves with the selected item's ID.
+     */
+    @Override
+    public Task<DriveId> pickItem(OpenFileActivityOptions openOptions)
+    {
+        mOpenItemTaskSource = new TaskCompletionSource<>();
+        getDriveClient()
+                .newOpenFileActivityIntentSender(openOptions)
+                .continueWith(new Continuation<IntentSender, Void>()
+                {
+                    @Override
+                    public Void then(@NonNull Task<IntentSender> task) throws Exception {
+                        startIntentSenderForResult(
+                                task.getResult(), REQUEST_CODE_OPEN_ITEM,
+                                null, 0, 0, 0);
+                        return null;
+                    }
+                });
+        return mOpenItemTaskSource.getTask();
     }
 }

@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -49,6 +51,19 @@ public class GeneralActivity extends AppCompatActivity
      */
     public GeneralActivity()
     {}
+
+
+    /**
+     * Function: isDeviceOnline
+     * @Desciption: Check if device in network or not!
+     */
+    private boolean isDeviceOnline()
+    {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
 
     /**
      * Function: showMessageOKCancel

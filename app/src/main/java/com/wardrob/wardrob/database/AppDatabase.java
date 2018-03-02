@@ -4,6 +4,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.support.annotation.VisibleForTesting;
 
 @Database(entities = {ItemObject.class, UserObject.class, LookObject.class}, version = 17)
 public abstract class AppDatabase extends RoomDatabase
@@ -14,7 +15,7 @@ public abstract class AppDatabase extends RoomDatabase
     public abstract UserDao userDao();
     public abstract LookDao lookDao();
 
-    private static String database = "item-database";
+    public static String database = "item-database";
     public static Context ctx;
 
 
@@ -23,8 +24,7 @@ public abstract class AppDatabase extends RoomDatabase
         if (INSTANCE == null)
         {
             ctx = context;
-            INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(),
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                          AppDatabase.class,
                                         database).allowMainThreadQueries().build();
         }
@@ -38,12 +38,24 @@ public abstract class AppDatabase extends RoomDatabase
 
 
     /**
-     * Function: getDataBasePath
+     * Switches the internal implementation with an empty in-memory database.
+          * @param context The context.
+     */
+    @VisibleForTesting
+    public static void switchToInMemory(Context context)
+    {
+        INSTANCE = Room.inMemoryDatabaseBuilder(context.getApplicationContext(),
+                                        AppDatabase.class).allowMainThreadQueries().build();
+
+    }
+
+    /**
+     * Function: getRoomDBPath
      * @return: currentDBPath
      */
-    public String getDataBasePath()
+    public String getRoomDBPath()
     {
-        String currentDBPath = ctx.getDatabasePath(database+".db").getAbsolutePath();
+        String currentDBPath = ctx.getDatabasePath(database).getAbsolutePath();
         return currentDBPath;
     }
 }

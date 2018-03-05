@@ -1,11 +1,6 @@
 ====================================================================================================
 ==================                                                                ==================
 ====================================================================================================
-Google API temp data:
-
-Alias: key0
-MD5: 75:04:93:45:E1:44:AA:7F:68:97:28:9F:42:3F:A0:71
-SHA1: 56:84:7D:07:29:84:9F:E9:A1:77:1F:19:37:D8:39:58:50:93:15:E0
 
 Клиент OAuth
 932805877006-alnao7lkc6nek8u2upfme2sqcb3e3jor.apps.googleusercontent.com
@@ -26,6 +21,10 @@ https://android-developers.googleblog.com/2014/02/new-client-api-model-in-google
 
 [MOST FULL EXAMPLE]
 https://github.com/googledrive/android-demos/tree/master/app/src/main/java/com/google/android/gms/drive/sample/demo
+
+[ -==== THIS EXAMPLE SHOWS REAL DATA GRAB FROM YOUR ACCOUNT FOR TESTING ====- ]
+https://developers.google.com/drive/v2/reference/files/list
+
 
 ====================================================================================================
 

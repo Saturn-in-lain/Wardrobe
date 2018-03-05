@@ -69,13 +69,14 @@
 
     <!-- PATH -->
     <string name="path_main">           /sdcard/Wardrobe/</string>
-    <string name="path_upper_outfit">   upper_outfit    </string>
-    <string name="path_lower_outfit">   lower_outfit    </string>
-    <string name="path_outerwear">      outerwear       </string>
-    <string name="path_hats">           hats            </string>
-    <string name="path_shoes">          shoes           </string>
-    <string name="path_accessories">    accessories     </string>
-    <string name="path_users">          users           </string>
+    <string name="path_wardrobe">       Wardrobe         </string>
+    <string name="path_upper_outfit">   upper_outfit     </string>
+    <string name="path_lower_outfit">   lower_outfit     </string>
+    <string name="path_outerwear">      outerwear        </string>
+    <string name="path_hats">           hats             </string>
+    <string name="path_shoes">          shoes            </string>
+    <string name="path_accessories">    accessories      </string>
+    <string name="path_users">          users            </string>
 
     <!-- PERMISSIONS -->
     <string name="persmission_camera">                  Camera                      </string>

@@ -7,7 +7,6 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -24,21 +23,20 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveClient;
-import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.DriveResourceClient;
 import com.google.android.gms.drive.OpenFileActivityOptions;
-import com.google.android.gms.drive.query.Filters;
-import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.DriveScopes;
 import com.wardrob.wardrob.R;
-import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import timber.log.Timber;
 
 /**
@@ -72,6 +70,12 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
      * Tracks completion of the drive picker
      */
     private TaskCompletionSource<DriveId> mOpenItemTaskSource;
+
+
+    /**
+     * Credentials from Google
+     */
+    GoogleAccountCredential mCredential;
 
     /**
      * Presenter
@@ -108,16 +112,10 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
     private void backupInitialization()
     {
         //Step: 1 - Create if not exist
-        presenter.createFolderOnGoogleDrive(null);
-
-        if(null != mGoogleApiClient)
-            presenter.check_folder_exists(ResourcesGetterSingleton.getStr(R.string.google_folder));
-        else
-            Timber.e("\n\t\t WE HAVE NOT GET mGoogleApiClient");
-
-        //Step: 2 - Save database file
-        //presenter.saveFileOnGoogleDrive();
+        //presenter.createFolderOnGoogleDrive(null);
+        presenter.createFoldersForBackupOnGoogleDrive();
     }
+
 
     /**
      * Function: onStop
@@ -149,8 +147,6 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
                     // required and is fatal. For apps where sign-in is optional, handle
                     // appropriately
                     Timber.e("\t\t Sign-in failed. [1] --> resultCode=" + String.valueOf(resultCode));
-                    //finish();
-
                     ///////////////////////////////////////////////////////////////////////////////////////
                     // Investigation!
                     GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -162,7 +158,8 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
 
                 Task<GoogleSignInAccount> getAccountTask =
                         GoogleSignIn.getSignedInAccountFromIntent(data);
-                if (getAccountTask.isSuccessful()) {
+                if (getAccountTask.isSuccessful())
+                {
                     initializeDriveClient(getAccountTask.getResult());
                 }
                 else
@@ -197,10 +194,11 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
         requiredScopes.add(Drive.SCOPE_FILE);
         requiredScopes.add(Drive.SCOPE_APPFOLDER);
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+
         if (signInAccount != null && signInAccount.getGrantedScopes().containsAll(requiredScopes))
         {
             initializeDriveClient(signInAccount);
-            Timber.d("\t\t -signIn-> Signing default with already available login");
         }
         else
         {
@@ -217,7 +215,8 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
 
             startActivityForResult(googleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
 
-            Timber.d("\t\t -signIn-> Signing with chooser of account");
+mCredential.setSelectedAccountName(signInAccount.getEmail());
+Timber.e("\t\t -signIn-> Signing with chooser of account: " + signInAccount.getEmail());
             //932805877006-s0pm7ddv3hps2r28i3fb6td37efof7lg.apps.googleusercontent.com
 
         }
@@ -232,6 +231,17 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
         mDriveClient = Drive.getDriveClient(getApplicationContext(), signInAccount);
         mDriveResourceClient = Drive.getDriveResourceClient(getApplicationContext(), signInAccount);
         onDriveClientReady();
+
+        //----------------------------------------------------------------
+        String[] SCOPES = { DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_PHOTOS_READONLY };
+        mCredential = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
+                                                            Arrays.asList(SCOPES))
+                                                            .setBackOff(new ExponentialBackOff());
+
+        mCredential.setSelectedAccountName(signInAccount.getEmail());
+        Timber.e("\t\t -initializeDriveClient-> Signing with account: " + signInAccount.getEmail());
+        //----------------------------------------------------------------
+        return;
     }
 
 
@@ -299,6 +309,8 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
     {
         Timber.i("* API client connected !!!.");
         isAPIConnected = true;
+        test();
+
     }
 
     @Override
@@ -335,6 +347,13 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
         return mOpenItemTaskSource;
     }
 
+    //============================================================================================
+    public void test()
+    {
+        new MakeRequestTask(mCredential).execute();
+    }
+
+
     /**
      * Prompts the user to select a folder using OpenFileActivity.
      *
@@ -360,3 +379,30 @@ public abstract class BaseDemoActivity extends AppCompatActivity implements
         return mOpenItemTaskSource.getTask();
     }
 }
+
+//    /**
+//     * Check that Google Play services APK is installed and up to date.
+//     * @return true if Google Play Services is available and up to
+//     *     date on this device; false otherwise.
+//     */
+//    private boolean isGooglePlayServicesAvailable() {
+//        GoogleApiAvailability apiAvailability =
+//                GoogleApiAvailability.getInstance();
+//        final int connectionStatusCode =
+//                apiAvailability.isGooglePlayServicesAvailable(this);
+//        return connectionStatusCode == ConnectionResult.SUCCESS;
+//    }
+//
+//    /**
+//     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
+//     * Play Services installation via a user dialog, if possible.
+//     */
+//    private void acquireGooglePlayServices() {
+//        GoogleApiAvailability apiAvailability =
+//                GoogleApiAvailability.getInstance();
+//        final int connectionStatusCode =
+//                apiAvailability.isGooglePlayServicesAvailable(this);
+//        if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
+//            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+//        }
+//    }

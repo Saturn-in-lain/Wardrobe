@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -15,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import timber.log.Timber;
@@ -135,6 +137,50 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
 //                                            .executeMediaAndDownloadTo(outputStream);
         }
         catch (IOException e) {e.printStackTrace();}
+    }
+
+    //==================================================================================
+
+    private void createFolder(String folderName)
+    {
+        File fileMetadata = new File();
+        fileMetadata.setName(folderName);
+        fileMetadata.setMimeType("application/vnd.google-apps.folder");
+
+        File file = null;
+        try {
+            file = mService.files().create(fileMetadata)
+                    .setFields("id")
+                    .execute();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        Timber.d("Folder ID: " + file.getId());
+    }
+
+    //TODO Test
+    private void insertFile(String pathName) //"files/photo.jpg"
+    {
+        String folderId = "0BwwA4oUTeiV1TGRPeTVjaWRDY1E";
+        File fileMetadata = new File();
+        fileMetadata.setName("photo.jpg");
+        fileMetadata.setParents(Collections.singletonList(folderId));
+
+        java.io.File filePath = new java.io.File(pathName);
+        FileContent mediaContent = new FileContent("image/jpeg", filePath);
+        File file = null;
+        try
+        {
+            file = mService.files().create(fileMetadata, mediaContent)
+                    .setFields("id, parents")
+                    .execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("File ID: " + file.getId());
     }
     //==================================================================================
 

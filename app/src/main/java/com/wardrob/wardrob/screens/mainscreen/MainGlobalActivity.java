@@ -22,10 +22,13 @@ import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.adapter.SwipePagerAdapter;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.google_service.BaseDemoActivity;
+import com.wardrob.wardrob.google_service.GoogleBaseActivity;
+
+import java.util.List;
 
 import timber.log.Timber;
-
-public class MainGlobalActivity extends BaseDemoActivity implements LocationListener
+//public class MainGlobalActivity extends BaseDemoActivity implements LocationListener
+public class MainGlobalActivity extends GoogleBaseActivity implements LocationListener
 {
 
     TabLayout.Tab SettingsTab;
@@ -106,6 +109,7 @@ public class MainGlobalActivity extends BaseDemoActivity implements LocationList
         try
         {
             Timber.e("\t\t[onClickCreate] --> 1!!!\n");
+            getResultsFromApi();
         }
         catch (Exception e)
         {
@@ -214,6 +218,17 @@ public class MainGlobalActivity extends BaseDemoActivity implements LocationList
     {
         Timber.d("\t\t\t<---[onDriveClientReady]--->");
 
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms)
+    {
+        // Do nothing.
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        // Do nothing.
     }
     //--------------------------------------------------------------------------------------------
 }

@@ -13,6 +13,7 @@ import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.DriveResource;
 import com.google.android.gms.drive.Metadata;
+import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.drive.OpenFileActivityOptions;
 import com.google.android.gms.drive.query.Filters;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.api.services.drive.model.FileList;
 import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.database.AppDatabase;
@@ -41,6 +43,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -295,6 +298,7 @@ public class BaseDemoPresenter
 
     }
 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //// https://medium.com/@AndroidAdvance/upload-files-to-google-drive-with-android-api-how-to-copy-paste-pls-thx-c512c98f325f
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -325,6 +329,19 @@ public class BaseDemoPresenter
                 else
                 {
                     boolean isFound = false;
+
+                    /////////////////////////////////////////////////////////////////////////////////
+                    // TEMP - Test debug information RAT
+//                    MetadataBuffer metadata = result.getMetadataBuffer();
+//                    Timber.d("-----------------------------------------------------------");
+//                    for (int i = 0; i < metadata.getCount(); i++)
+//                    {
+//                        Timber.d("\t\tfolder id:", metadata.get(i).getDriveId().toString());
+//                        Timber.d("\t\tfolder name:", metadata.get(i).getTitle().toString());
+//                    }
+//                    Timber.d("-----------------------------------------------------------");
+                    /////////////////////////////////////////////////////////////////////////////////
+
                     for (Metadata m : result.getMetadataBuffer())
                     {
 
@@ -338,7 +355,6 @@ public class BaseDemoPresenter
                                 Timber.e("Folder exists: " + m.getTitle() + " vs " + folderName +
                                         " --> driveId: " + driveId.toString());
                                 Timber.e("Files size: " + m.getFileSize());
-
 
 //listOFFolders.put(folderName,driveId);
                                 break;

@@ -52,6 +52,7 @@
         <activity android:name=".screens.new_look.NewLookActivity" />
         <activity android:name=".screens.mainscreen.MainGlobalActivity" />
         <activity android:name=".screens.listscreen.ItemsListActivity"></activity>
+        <activity android:name=".google_service.GoogleBaseActivity" />
     </application>
 
 </manifest>

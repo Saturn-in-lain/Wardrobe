@@ -31,6 +31,11 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
+//        catch (UserRecoverableAuthIOException e)
+//        {
+//            startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
+//        }
+
         mService = new com.google.api.services.drive.Drive.Builder(
                 transport, jsonFactory, credential)
                 .setApplicationName("Drive API Android Quickstart")
@@ -52,9 +57,9 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
     {
         try
         {
-            retrieveAllFiles(mService);
-            //return getDataFromApi();
-            return null;
+            //retrieveAllFiles(mService);
+            return getDataFromApi();
+
         } catch (Exception e) {
             mLastError = e;
             cancel(true);
@@ -105,7 +110,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
             }
             catch (IOException e)
             {
-                Timber.e("An error occurred: " + e);
+                Timber.e("\t\t[retrieveAllFiles]An error occurred: " + e);
                 request.setPageToken(null);
             }
         } while (request.getPageToken() != null &&
@@ -140,7 +145,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
     {
         if (mLastError != null)
         {
-                Timber.e("\t\tThe following error occurred:\n"+ mLastError.getMessage());
+                Timber.e("\t[onCancelled] tThe following error occurred:\n"+ mLastError.getMessage());
         }
     }
 }

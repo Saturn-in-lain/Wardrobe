@@ -11,7 +11,9 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +97,8 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         return fileInfo;
     }
 
-    private static List<File> retrieveAllFiles(Drive service) throws IOException
+    //==================================================================================
+    private List<File> retrieveAllFiles(Drive service) throws IOException
     {
         List<File> result = new ArrayList<File>();
         Drive.Files.List request = service.files().list();
@@ -110,13 +113,75 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
             }
             catch (IOException e)
             {
-                Timber.e("\t\t[retrieveAllFiles]An error occurred: " + e);
+                System.out.println("An error occurred: " + e);
                 request.setPageToken(null);
             }
-        } while (request.getPageToken() != null &&
+        }
+        while (request.getPageToken() != null &&
                 request.getPageToken().length() > 0);
 
         return result;
+    }
+
+    //==================================================================================
+    private void downloadFileFromGoogleDrive(String fileId)
+    {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        try
+        {
+            mService.files().get(fileId).executeMediaAndDownloadTo(outputStream);
+
+//            mService.files().export(fileId, this.getMimeType("Plain text"))
+//                                            .executeMediaAndDownloadTo(outputStream);
+        }
+        catch (IOException e) {e.printStackTrace();}
+    }
+    //==================================================================================
+
+    private String getMimeType(String type)
+    {
+        String returnVal = null;
+
+        switch(type)
+        {
+            case "HTML":
+                returnVal = "text/html";
+                break;
+            case "HTML (zipped)":
+                returnVal = "application/zip";
+                break;
+            case "Plain text":
+                returnVal = "text/plain";
+                break;
+            case "Rich text":
+                returnVal = "application/rtf";
+                break;
+            case "Open Office doc":
+                returnVal = "application/vnd.oasis.opendocument.text";
+                break;
+            case "PDF":
+                returnVal = "application/pdf\n";
+                break;
+            case "MS Word document":
+                returnVal = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                break;
+            case "CSV":
+                returnVal = "text/csv";
+                break;
+            case "JPEG":
+                returnVal = "image/jpeg";
+                break;
+            case "PNG":
+                returnVal = "image/png";
+                break;
+            case "JSON":
+                returnVal = "application/vnd.google-apps.script+json";
+                break;
+            default:
+                returnVal = "text/plain";
+                break;
+        }
+        return returnVal;
     }
 
     @Override

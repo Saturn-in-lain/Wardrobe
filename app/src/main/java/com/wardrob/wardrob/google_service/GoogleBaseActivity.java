@@ -2,13 +2,9 @@ package com.wardrob.wardrob.google_service;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
-
-
-
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Dialog;
@@ -20,14 +16,11 @@ import android.net.NetworkInfo;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-
 import java.util.Arrays;
 import java.util.List;
-
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
-
 
 public abstract class GoogleBaseActivity extends AppCompatActivity
         implements EasyPermissions.PermissionCallbacks
@@ -36,14 +29,15 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
     GoogleAccountCredential mCredential;
 
 
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    static final int REQUEST_ACCOUNT_PICKER          = 1000;
+    static final int REQUEST_AUTHORIZATION           = 1001;
+    static final int REQUEST_GOOGLE_PLAY_SERVICES    = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
 
-    private static final String BUTTON_TEXT = "Call Drive API";
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY };
+    private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY,
+                                             DriveScopes.DRIVE,
+                                             DriveScopes.DRIVE_FILE};
 
 
     /**
@@ -54,34 +48,65 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
     {
         super.onStart();
 
-        //
         mCredential = GoogleAccountCredential.usingOAuth2(
-                getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
+                                getApplicationContext(), Arrays.asList(SCOPES))
+                                .setBackOff(new ExponentialBackOff());
+
+        checkAccessRights();
         Timber.d("\t\t [onStart] Initialize credentials and service object.  ");
     }
 
 
     /**
+     * Function: getResultsFromApi
      * Attempt to call the API, after verifying that all the preconditions are
      * satisfied. The preconditions are: Google Play Services installed, an
      * account was selected and the device currently has online access. If any
      * of the preconditions are not satisfied, the app will prompt the user as
      * appropriate.
      */
-    public void getResultsFromApi() {
-        if (! isGooglePlayServicesAvailable()) {
-            acquireGooglePlayServices();
-        } else if (mCredential.getSelectedAccountName() == null) {
-            chooseAccount();
-        } else if (! isDeviceOnline()) {
-            Timber.d("No network connection available.");
-        } else {
-            new MakeRequestTask(mCredential).execute();
+    public void getResultsFromApi()
+    {
+        if (checkAccessRights())
+        {
+            new MakeRequestTask(mCredential, MakeRequestTask.OTHERS).execute();
+        }
+        else
+        {
+            Timber.e("\t\tError on getResultsFromApi");
         }
     }
 
     /**
+     * Function: checkAccessRights
+     * @param
+     * @return: boolean isCorrect
+     */
+    private boolean checkAccessRights()
+    {
+        boolean isCorrect = true;
+        if (! isGooglePlayServicesAvailable())
+        {
+            acquireGooglePlayServices();
+            isCorrect = false;
+            Timber.d("\tisGooglePlayServicesAvailable = FALSE");
+        }
+        else if (mCredential.getSelectedAccountName() == null)
+        {
+            chooseAccount();
+            isCorrect = false;
+            Timber.d("\tAccount name == null.");
+        }
+        else if (! isDeviceOnline())
+        {
+            Timber.d("\tNo network connection available.");
+            isCorrect = false;
+        }
+        return isCorrect;
+    }
+
+    /**
+     * Function: chooseAccount
      * Attempts to set the account used with the API credentials. If an account
      * name was previously saved it will use that one; otherwise an account
      * picker dialog will be shown to the user. Note that the setting the
@@ -92,21 +117,29 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
      * is granted.
      */
     @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
-    private void chooseAccount() {
+    private void chooseAccount()
+    {
         if (EasyPermissions.hasPermissions(
-                this, Manifest.permission.GET_ACCOUNTS)) {
+                this, Manifest.permission.GET_ACCOUNTS))
+        {
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
-            if (accountName != null) {
+            if (accountName != null)
+            {
                 mCredential.setSelectedAccountName(accountName);
-                getResultsFromApi();
-            } else {
+                //getResultsFromApi();
+                Timber.d("[chooseAccount] -> !");
+            }
+            else
+            {
                 // Start a dialog from which the user can choose an account
                 startActivityForResult(
                         mCredential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
             }
-        } else {
+        }
+        else
+        {
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
@@ -117,6 +150,7 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
     }
 
     /**
+     * Function: onActivityResult
      * Called when an activity launched here (specifically, AccountPicker
      * and authorization) exits, giving you the requestCode you started it with,
      * the resultCode it returned, and any additional data from it.
@@ -138,8 +172,11 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
                     Timber.d(
                             "This app requires Google Play Services. Please install " +
                                     "Google Play Services on your device and relaunch this app.");
-                } else {
-                    getResultsFromApi();
+                }
+                else
+                {
+                    //getResultsFromApi();
+                    Timber.d("[onActivityResult] -> REQUEST_GOOGLE_PLAY_SERVICES!");
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
@@ -154,19 +191,23 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
-                        getResultsFromApi();
+
+                        //getResultsFromApi();
+                        Timber.d("[onActivityResult] -> REQUEST_ACCOUNT_PICKER!");
                     }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    getResultsFromApi();
+                    //getResultsFromApi();
+                    Timber.d("[onActivityResult] -> REQUEST_AUTHORIZATION");
                 }
                 break;
         }
     }
 
     /**
+     * Function: onRequestPermissionsResult
      * Respond to requests for permissions at runtime for API 23 and above.
      * @param requestCode The request code passed in
      *     requestPermissions(android.app.Activity, String, int, String[])

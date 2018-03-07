@@ -11,6 +11,8 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.wardrob.wardrob.R;
+import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,19 +32,21 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
     private com.google.api.services.drive.Drive mService = null;
     private Exception mLastError = null;
 
-    MakeRequestTask(GoogleAccountCredential credential)
+    public final static int LOAD_DB_FILE_FROM = 0;
+    public final static int OTHERS = 0;
+
+    private int chooseTypeOFRequest;
+
+    MakeRequestTask(GoogleAccountCredential credential, int typeOfRequest)
     {
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
-//        catch (UserRecoverableAuthIOException e)
-//        {
-//            startActivityForResult(e.getIntent(), REQUEST_AUTHORIZATION);
-//        }
+        chooseTypeOFRequest = typeOfRequest;
 
         mService = new com.google.api.services.drive.Drive.Builder(
                 transport, jsonFactory, credential)
-                .setApplicationName("Drive API Android Quickstart")
+                .setApplicationName(ResourcesGetterSingleton.getStr(R.string.path_wardrobe))
                 .build();
 
         if (credential.getSelectedAccountName() == null)
@@ -62,13 +66,23 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         try
         {
             //retrieveAllFiles(mService);
-            return getDataFromApi();
+            if (chooseTypeOFRequest == OTHERS)
+            {
+                return getDataFromApi();
+            }
+            else
+            {
+                Timber.e("\t[doInBackground]\tUnknown chooseTypeOFRequest");
+            }
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             mLastError = e;
             cancel(true);
             return null;
         }
+        return null;
     }
 
     /**
@@ -94,6 +108,8 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
             {
                 fileInfo.add(String.format("%s (%s)\n",
                         file.getName(), file.getId()));
+
+                Timber.d("\t[%s]\t[%s]\t",file.getName(), file.getId());
             }
         }
         return fileInfo;
@@ -148,15 +164,13 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         fileMetadata.setMimeType("application/vnd.google-apps.folder");
 
         File file = null;
-        try {
+        try
+        {
             file = mService.files().create(fileMetadata)
                     .setFields("id")
                     .execute();
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        catch (IOException e) { e.printStackTrace(); }
 
         Timber.d("Folder ID: " + file.getId());
     }

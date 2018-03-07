@@ -3,25 +3,17 @@ package com.wardrob.wardrob.screens.mainscreen;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveFile;
-import com.google.android.gms.drive.DriveFolder;
-import com.google.android.gms.drive.DriveId;
 import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.adapter.SwipePagerAdapter;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
-import com.wardrob.wardrob.google_service.BaseDemoActivity;
 import com.wardrob.wardrob.google_service.GoogleBaseActivity;
 
 import java.util.List;
@@ -30,7 +22,6 @@ import timber.log.Timber;
 //public class MainGlobalActivity extends BaseDemoActivity implements LocationListener
 public class MainGlobalActivity extends GoogleBaseActivity implements LocationListener
 {
-
     TabLayout.Tab SettingsTab;
 
     private static final int REQUEST_CODE_RESOLUTION    = 1;
@@ -38,9 +29,7 @@ public class MainGlobalActivity extends GoogleBaseActivity implements LocationLi
     private static final int REQUEST_CODE_CREATOR       = 3;
     private static final int REQUEST_CODE_CAPTURE_IMAGE = 4;
 
-    private GoogleApiClient mGoogleApiClient = null;
     private boolean fileOperation = false;
-    private DriveId mFileId;
     public DriveFile file;
 
     @Override
@@ -94,6 +83,8 @@ public class MainGlobalActivity extends GoogleBaseActivity implements LocationLi
             {
             }
         });
+
+
     }
     //============================================================================================//
     /**
@@ -108,7 +99,7 @@ public class MainGlobalActivity extends GoogleBaseActivity implements LocationLi
 
         try
         {
-            Timber.e("\t\t[onClickCreate] --> 1!!!\n");
+            Timber.e("\t\t[onClickCreate] --> !!!\n");
             getResultsFromApi();
         }
         catch (Exception e)

@@ -5,6 +5,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.DriveScopes;
+import com.wardrob.wardrob.database.AppDatabase;
+
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Dialog;
@@ -28,6 +30,7 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
 
     GoogleAccountCredential mCredential;
 
+    AppDatabase db = AppDatabase.getAppDatabase(this);
 
     static final int REQUEST_ACCOUNT_PICKER          = 1000;
     static final int REQUEST_AUTHORIZATION           = 1001;
@@ -36,8 +39,9 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
 
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY,
-                                             DriveScopes.DRIVE,
-                                             DriveScopes.DRIVE_FILE};
+                                             //DriveScopes.DRIVE,
+                                             //DriveScopes.DRIVE_FILE
+                                            };
 
 
     /**
@@ -69,11 +73,27 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
     {
         if (checkAccessRights())
         {
-            new MakeRequestTask(mCredential, MakeRequestTask.OTHERS).execute();
+            new MakeRequestTask(mCredential,
+                                MakeRequestTask.OTHERS,
+                                db).execute();
         }
         else
         {
             Timber.e("\t\tError on getResultsFromApi");
+        }
+    }
+
+    public void initGoogleActivity()
+    {
+        if (checkAccessRights())
+        {
+            new MakeRequestTask(mCredential,
+                                MakeRequestTask.DOWNLOAD_FILE,
+                                db).execute();
+        }
+        else
+        {
+            Timber.e("\t[initFolders]\tError on getResultsFromApi");
         }
     }
 
@@ -181,10 +201,12 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
                 break;
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null &&
-                        data.getExtras() != null) {
+                        data.getExtras() != null)
+                {
                     String accountName =
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
+                    if (accountName != null)
+                    {
                         SharedPreferences settings =
                                 getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();

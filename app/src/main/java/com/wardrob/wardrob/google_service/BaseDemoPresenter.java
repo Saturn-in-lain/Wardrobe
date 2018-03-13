@@ -35,6 +35,7 @@ import com.google.api.services.drive.model.File;
 
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,12 +79,6 @@ public class BaseDemoPresenter
             this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_hats),         null);
             this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_shoes),        null);
             this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_accessories),  null);
-
-//            CheckFolderOnGoogleDrive(ResourcesGetterSingleton.getStr(R.string.path_wardrobe));
-//            for ( String folderName : this.listOFFolders.keySet() )
-//            {
-//                CheckFolderOnGoogleDrive(folderName);
-//            }
 
             CheckFolderOnGoogleDrive(ResourcesGetterSingleton.getStr(R.string.path_wardrobe));
 
@@ -202,7 +197,12 @@ public class BaseDemoPresenter
     }
 
 
-
+    /**
+     * Function: createFolderInFolder
+     * @param parent String
+     * @param folderName
+     * @return
+     */
     private void createFolderInFolder(final DriveFolder parent, final String folderName)
     {
         //Timber.e("\t\t\t Create createFolderInFolder " + folderName);
@@ -282,7 +282,7 @@ public class BaseDemoPresenter
                                 //===========================================================
                                 saveFileOnGoogleDrive(db.database+".db");
                                 //===========================================================
-                                retriveDataBaseFileFromGoogleDrive();
+                                //retrieveDataBaseFileFromGoogleDrive();
                                 //===========================================================
 
                             }
@@ -344,7 +344,6 @@ public class BaseDemoPresenter
 
                     for (Metadata m : result.getMetadataBuffer())
                     {
-
                         if (!m.isTrashed())
                         {
                             if (m.getTitle().equals(folderName))
@@ -355,8 +354,6 @@ public class BaseDemoPresenter
                                 Timber.e("Folder exists: " + m.getTitle() + " vs " + folderName +
                                         " --> driveId: " + driveId.toString());
                                 Timber.e("Files size: " + m.getFileSize());
-
-//listOFFolders.put(folderName,driveId);
                                 break;
                             }
                         }
@@ -374,19 +371,6 @@ public class BaseDemoPresenter
     //============================================================================================//
     //============================================================================================//
 
-//    private static void printFile(Drive service, String fileId)
-//    {
-//        try
-//        {
-//            File file = service.files().get(fileId).execute();
-//
-//            System.out.println("Title: "        + file.getTitle());
-//            System.out.println("Description: "  + file.getDescription());
-//            System.out.println("MIME type: "    + file.getMimeType());
-//        }
-//        catch (IOException e) { System.out.println("An error occurred: " + e); }
-//    }
-
     /**
      * Download a file's content.
      *
@@ -395,62 +379,13 @@ public class BaseDemoPresenter
      * @return InputStream containing the file's content if successful,
      *         {@code null} otherwise.
      */
-//    private static InputStream downloadFile(Drive service, File file)
-// {
-//        if (file.getDownloadUrl() != null && file.getDownloadUrl().length() > 0)
-// {
-//            try
-//              {
-//                HttpResponse resp =
-//                        service.getRequestFactory().buildGetRequest(new GenericUrl(file.getDownloadUrl()))
-//                                .execute();
-//                return resp.getContent();
-//            }
-//            catch (IOException e)     // An error occurred.
-//            {
-//                e.printStackTrace();
-//                return null;
-//            }
-//        } else {
-//            // The file doesn't have any content stored on Drive.
-//            return null;
-//        }
-//    }
-
-    //============================================================================================//
-    //============================================================================================//
-
-    /**
-     * Function: retriveDataBaseFileFromGoogleDrive
-     * @param
-     * @return
-     */
-    public void retriveDataBaseFileFromGoogleDrive()
+    private static void downloadFile(Drive service, File file)
     {
-//        String file_to_download = db.database+".db";
-//
-//        DriveFile file = Drive.DriveApi.getFile(view.getGoogleApiClient(), driveId);
-//
-//
-//        Drive service = new Drive();
-//
-//        DriveResource.MetadataResult mdRslt = file.getMetadata(view.getGoogleApiClient()).await();
-//        if (mdRslt != null && mdRslt.getStatus().isSuccess())
-//        {
-//            String link = mdRslt.getMetadata().getWebContentLink();
-//            Timber.d("\t\t\t ---> LINK: ", link);
-//        }
-
-
-//        1wGbJJPaiPcQA_Lea9NpoeR8rQtlNGSV3 -> tst.txt default tes file
-//        "defaultOpenWithLink": "https://drive.google.com/file/d/1wGbJJPaiPcQA_Lea9NpoeR8rQtlNGSV3/view?usp=drivesdk",
-//        "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/text/plain",
-//        "thumbnailLink": "https://lh3.googleusercontent.com/wODwyNU3-YdXjozTjf8Y1Z1Q9xrTVfZMwuO11IZASVyWGtbqoX9kkU4YjZ4F744giBx7j7gCkRs=s220",
-////        "title": "tst.txt",
-
-//        Drive.DriveApi.fetchDriveId(view.getGoogleApiClient(), "1wGbJJPaiPcQA_Lea9NpoeR8rQtlNGSV3")
-//                .setResultCallback(idCallback);
+        return;
     }
+
+    //============================================================================================//
+    //============================================================================================//
 
 
 

@@ -89,9 +89,10 @@ dependencies {
 
     compile 'com.google.api-client:google-api-client:1.23.0'
 
-
-    //compile 'com.google.android.gms:play-services-auth:11.6.2'
     compile 'pub.devrel:easypermissions:0.3.0'
+
+
+    compile 'org.apache.commons:commons-io:1.3.2' // FileUtils placed here
 
     compile('com.google.api-client:google-api-client-android:1.23.0')
     {

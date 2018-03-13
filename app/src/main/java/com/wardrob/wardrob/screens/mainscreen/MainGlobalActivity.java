@@ -120,7 +120,8 @@ public class MainGlobalActivity extends GoogleBaseActivity implements LocationLi
         Timber.e("F:[onClickOpen]: START ");
         try
         {
-            Timber.e("\t\t[onClickOpen] --> 1!!!\n");
+            Timber.e("\t[onClickOpen]\t-->initGoogleActivity!!!\n");
+            initGoogleActivity();
         }
         catch (Exception e)
         {

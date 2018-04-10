@@ -20,6 +20,9 @@ public interface ItemDao
     @Query("SELECT * FROM item_table WHERE user_name LIKE :first LIMIT 1")
     ItemObject findByName(String first);
 
+    @Query("SELECT * FROM item_table WHERE user_name LIKE :user AND item_image_name LIKE :image LIMIT 1")
+    ItemObject validatePresenseInDatabase(String user, String image);
+
     @Query("SELECT * FROM item_table WHERE uid LIKE :id LIMIT 1")
     ItemObject findById(int id);
 

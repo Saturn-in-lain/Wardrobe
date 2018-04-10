@@ -1,10 +1,16 @@
 package com.wardrob.wardrob.google_service;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.FileContent;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -14,11 +20,22 @@ import com.google.api.services.drive.model.FileList;
 import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.database.AppDatabase;
+import com.wardrob.wardrob.database.ItemObject;
 
 import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +63,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
     public final static int DOWNLOAD_FILE = 4;
 
     private AppDatabase db;
-
+    private final static String download_database_file = "download.db";
 
 
     private HashMap<String, String> listOFFolders  = new HashMap<String, String>();
@@ -102,7 +119,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
             }
             else if(chooseTypeOFRequest == CREATE_FOLDERS)
             {
-                //createFoldersForBackupOnGoogleDrive();
+                createFoldersForBackupOnGoogleDrive();
             }
             else if(chooseTypeOFRequest == BACKUP_FILE)
             {
@@ -183,19 +200,6 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         return result;
     }
 
-    //==================================================================================
-    private void downloadFileFromGoogleDrive(String fileId)
-    {
-        OutputStream outputStream = new ByteArrayOutputStream();
-        try
-        {
-            mService.files().get(fileId).executeMediaAndDownloadTo(outputStream);
-
-//            mService.files().export(fileId, this.getMimeType("Plain text"))
-//                                            .executeMediaAndDownloadTo(outputStream);
-        }
-        catch (IOException e) {e.printStackTrace();}
-    }
 
     //==================================================================================
 
@@ -226,16 +230,11 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
                     .execute();
         }
         catch (IOException e) { e.printStackTrace(); }
-
         Timber.d("Folder ID: " + file.getId());
 
-//--------------------------------------------------------------------------------------------------
         insertFile(file.getId(),
-                db.database+".db",
-                db.getRoomDBPath()
-                );
-//--------------------------------------------------------------------------------------------------
-
+                    db.database+".db",
+                    db.getRoomDBPath());
         return file.getId();
     }
 
@@ -251,9 +250,6 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         String mainFolderId = createFolder(ResourcesGetterSingleton.getStr(R.string.path_wardrobe),
                 null);
 
-
-        //          <-- Init folders names for creation/ saving drive_id -->
-        //==================================================================================
         this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_users),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_users),
                                              mainFolderId));
@@ -275,11 +271,11 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_accessories),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_accessories),
                                              mainFolderId));
-        //==================================================================================
 
+
+        //TODO: Also copy all images in case no such in GDrive.
 
     }
-
 
 //==================================================================================================
 //==================================================================================================
@@ -287,12 +283,13 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
 
     /**
      * Function: retrieveDataBaseFileFromGoogleDrive
-     * @param
      * @return
      */
     public void retrieveDataBaseFileFromGoogleDrive()
     {
-        String file_to_download = ResourcesGetterSingleton.getStr(R.string.path_main) + db.database+".db";
+        String fileName = db.database+".db";
+        String file_to_download = ResourcesGetterSingleton.getStr(R.string.path_main) +fileName;
+
         OutputStream outputStream = new ByteArrayOutputStream();
 
         try
@@ -311,21 +308,28 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
                     fileInfo.add(String.format("%s (%s)\n",
                             file.getName(), file.getId()));
 
-                    if(file.getName().equals(file_to_download))
+                    //Timber.d("\t[%s]\t[%s]\t",file.getName(), file.getId());
+
+                    if(file.getName().equals(fileName))
                     {
-                        Timber.d("\t[%s]\t[%s]\t",file.getName(), file.getId());
-                        mService.files().get(file.getId())
-                                .executeMediaAndDownloadTo(outputStream);
+                        Timber.d("\tDetect: [%s]\t[%s]\t",file.getName(), file.getId());
 
-
+                        //--------------------------------------------------------------------------
+                        //First variant
+                        mService.files().get(file.getId()).executeMediaAndDownloadTo(outputStream);
+                        //Alternative
                         File file_alternative = mService.files().get(file.getId()).execute();
-                        //file_alternative
-                        //file_alternative.getMd5Checksum();
-                        //mService.getBaseUrl();
-                        //isDatabaseFilesAreIdentical(file_alternative);
-
-
-
+                        //--------------------------------------------------------------------------
+                        FileOutputStream fos = new FileOutputStream(ResourcesGetterSingleton.getStr(R.string.path_main)+download_database_file);
+                        ByteArrayOutputStream baos = (ByteArrayOutputStream) outputStream;
+                        baos.writeTo(fos);
+                        //---------------------------------------------
+                        //downloadFileContentJson(mService,file.getId());
+                        //---------------------------------------------
+                        Timber.d("isDatabaseFilesAreIdentical: " + isDatabaseFilesAreIdentical());
+                        //---------------------------------------------
+                        checkTheDifferenceInDB();
+                        //---------------------------------------------
                         break;
                     }
                 }
@@ -339,20 +343,118 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         }
     }
 //==================================================================================================
-//==================================================================================================
     /**
-     * Function: insertFile
-     * @param
-     * @return
+     * Download a file's content.
+     *
+     * @param service Drive API service instance.
+          * @return InputStream containing the file's content if successful,
+     *         {@code null} otherwise.
      */
-    public boolean isDatabaseFilesAreIdentical( java.io.File loadedFromGoogleService)
+    private static InputStream downloadFileContentJson(Drive service, String fileId)
     {
-        boolean retVal = false;
-        java.io.File currencDataBase = new java.io.File(db.getRoomDBPath());
+
+        //https://developers.google.com/drive/v2/reference/files/get/
+        String downloadURL = "https://www.googleapis.com/drive/v2/files/"+fileId;
+        JSONObject finalResult = null;
 
         try
         {
-            retVal = FileUtils.contentEquals(currencDataBase,loadedFromGoogleService);
+            HttpResponse resp =
+                    service.getRequestFactory().buildGetRequest(new GenericUrl(downloadURL))
+                            .execute();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(resp.getContent(), "UTF-8"));
+            StringBuilder builder = new StringBuilder();
+            for (String line = null; (line = reader.readLine()) != null;)
+            {
+                builder.append(line).append("\n");
+            }
+            JSONTokener tokener = new JSONTokener(builder.toString());
+            try
+            {
+                finalResult = new JSONObject(tokener);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            Timber.d("\t[DownloadContent]\t"+finalResult.toString());
+            return resp.getContent();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();// An error occurred.
+            return null;
+        }
+    }
+
+//==================================================================================================
+
+    /**
+    * Function:
+    * @param
+    * @return
+    */
+    public void checkTheDifferenceInDB()
+    {
+        String path = ResourcesGetterSingleton.getStr(R.string.path_main)+download_database_file;
+        if (null != path)
+        {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(path, null, 0);
+
+            Cursor c = db.rawQuery("SELECT * FROM item_table",null);
+
+            c.moveToFirst();
+            while(!c.isAfterLast())
+            {
+                String user       = c.getString(1);
+                String image_path = c.getString(3);
+
+                ItemObject item = this.db.itemDao().validatePresenseInDatabase(user,image_path);
+                if(null == item)
+                {
+                    //DELETE such image from GDrive
+                    // deleteFile(String fileId)
+                }
+            }
+
+
+            List<ItemObject> local_db_items = this.db.itemDao().getAll();
+            for (ItemObject item : local_db_items)
+            {
+                Cursor cur = db.rawQuery("SELECT * FROM item_table WHERE user_name LIKE " +
+                        item.getUserName()+ " AND item_image_name LIKE " +
+                        item.getItemImageName() + " LIMIT 1",null);
+
+                if (cur.isNull(0))
+                {
+                    //COPY IN GDrive
+                    //insertFile(String folderId, String fileName, String pathName)
+                }
+            }
+        }
+    }
+
+
+//==================================================================================================
+
+    /**
+     * Function: isDatabaseFilesAreIdentical
+     * @param
+     * @return
+     */
+    public boolean isDatabaseFilesAreIdentical()
+    {
+        boolean retVal = false;
+        java.io.File currentDataBase = new java.io.File(db.getRoomDBPath());
+
+        String path = ResourcesGetterSingleton.getStr(R.string.path_main)+download_database_file;
+        java.io.File loadedFromGoogleService = new java.io.File(path);
+
+        try
+        {
+            retVal = FileUtils.contentEquals(currentDataBase,loadedFromGoogleService);
         }
         catch (IOException e)
         {
@@ -365,7 +467,8 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         return retVal;
     }
 
-
+//==================================================================================================
+//==================================================================================================
     /**
      * Function: insertFile
      * @param
@@ -395,13 +498,29 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         System.out.println("File ID: " + file.getId());
     }
 
+    /**
+     * Function: deleteFile
+     * @param
+     * @return
+     */
+    private void deleteFile(String fileId)
+    {
+        try
+        {
+            mService.files().delete(fileId).execute();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 //==================================================================================================
 //==================================================================================================
 
     /**
-     * Function: insertFile
-     * @param
-     * @return
+     * Function: getMimeType
+     * @param type String
+     * @return String variant for FileContent() param
      */
     private String getMimeType(String type)
     {

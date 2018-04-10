@@ -39,6 +39,16 @@ Snackbar snackbar =  Snackbar.make(findViewById(android.R.id.content),
         snackbar.show();
 
 ====================================================================================================
+Current Tasks:
+
+1. Save images in google drive [-]
+
+2. Load database file and parse it. [+]
+
+3. Load new files [-]
+
+
+====================================================================================================
 Tasks:
 
     [+] Refactor UI approach to application

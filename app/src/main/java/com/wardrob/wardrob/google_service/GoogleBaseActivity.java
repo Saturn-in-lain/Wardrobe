@@ -74,7 +74,7 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
         if (checkAccessRights())
         {
             new MakeRequestTask(mCredential,
-                                MakeRequestTask.OTHERS,
+                                MakeRequestTask.DOWNLOAD_FILE,
                                 db).execute();
         }
         else
@@ -88,7 +88,7 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
         if (checkAccessRights())
         {
             new MakeRequestTask(mCredential,
-                                MakeRequestTask.DOWNLOAD_FILE,
+                                MakeRequestTask.OTHERS,
                                 db).execute();
         }
         else
@@ -181,14 +181,14 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
      *     activity result.
      */
     @Override
-    protected void onActivityResult(
-            int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode)
         {
             case REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode != RESULT_OK) {
+                if (resultCode != RESULT_OK)
+                {
                     Timber.d(
                             "This app requires Google Play Services. Please install " +
                                     "Google Play Services on your device and relaunch this app.");
@@ -199,6 +199,7 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
                     Timber.d("[onActivityResult] -> REQUEST_GOOGLE_PLAY_SERVICES!");
                 }
                 break;
+
             case REQUEST_ACCOUNT_PICKER:
                 if (resultCode == RESULT_OK && data != null &&
                         data.getExtras() != null)
@@ -219,8 +220,10 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
                     }
                 }
                 break;
+
             case REQUEST_AUTHORIZATION:
-                if (resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK)
+                {
                     //getResultsFromApi();
                     Timber.d("[onActivityResult] -> REQUEST_AUTHORIZATION");
                 }

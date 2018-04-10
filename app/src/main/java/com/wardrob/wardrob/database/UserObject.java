@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+//TODO: User should have unique name or we must not give ooportunity to create same name
+
 @Entity (tableName = "user_table")
 public class UserObject
 {

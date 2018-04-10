@@ -65,6 +65,7 @@ public class ItemsListPresenter
      * Function: getFragmentFolderPath
      * @param category
      * @return path String
+     * TODO: Refactor this test idea
      */
     public Integer getFragmentIndex(String category)
     {

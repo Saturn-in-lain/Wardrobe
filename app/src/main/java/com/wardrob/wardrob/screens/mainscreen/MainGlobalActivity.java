@@ -28,8 +28,8 @@ public class MainGlobalActivity extends GoogleBaseActivity implements LocationLi
     private static final int REQUEST_CODE_OPENER        = 2;
     private static final int REQUEST_CODE_CREATOR       = 3;
     private static final int REQUEST_CODE_CAPTURE_IMAGE = 4;
-
     private boolean fileOperation = false;
+
     public DriveFile file;
 
     @Override

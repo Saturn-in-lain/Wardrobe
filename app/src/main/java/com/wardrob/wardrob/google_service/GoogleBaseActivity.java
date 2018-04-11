@@ -74,7 +74,7 @@ public abstract class GoogleBaseActivity extends AppCompatActivity
         if (checkAccessRights())
         {
             new MakeRequestTask(mCredential,
-                                MakeRequestTask.DOWNLOAD_FILE,
+                                MakeRequestTask.FIRST_BACKUP,
                                 db).execute();
         }
         else

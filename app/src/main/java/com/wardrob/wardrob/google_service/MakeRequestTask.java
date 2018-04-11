@@ -21,8 +21,10 @@ import com.wardrob.wardrob.R;
 import com.wardrob.wardrob.core.ResourcesGetterSingleton;
 import com.wardrob.wardrob.database.AppDatabase;
 import com.wardrob.wardrob.database.ItemObject;
+import com.wardrob.wardrob.database.UserObject;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,11 +58,12 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
     private com.google.api.services.drive.Drive mService = null;
     private Exception mLastError = null;
 
-    public final static int LOAD_DB_FILE_FROM = 0;
+    public final static int FIRST_BACKUP = 0;
+
     public final static int OTHERS = 1;
-    public final static int CREATE_FOLDERS = 2;
-    public final static int BACKUP_FILE = 3;
     public final static int DOWNLOAD_FILE = 4;
+
+
 
     private AppDatabase db;
     private final static String download_database_file = "download.db";
@@ -113,22 +116,18 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
 //                    break;
 //            }
 
-            if (chooseTypeOFRequest == OTHERS)
-            {
-                return getDataFromApi();
-            }
-            else if(chooseTypeOFRequest == CREATE_FOLDERS)
+            if(chooseTypeOFRequest == FIRST_BACKUP)
             {
                 createFoldersForBackupOnGoogleDrive();
             }
-            else if(chooseTypeOFRequest == BACKUP_FILE)
+            else if (chooseTypeOFRequest == OTHERS)
             {
-                String mainFolderId = createFolder(ResourcesGetterSingleton.getStr(R.string.path_wardrobe),
-                                        null);
+                retrieveDataBaseFileFromGoogleDrive();
+                //return getDataFromApi();
             }
+
             else if(chooseTypeOFRequest == DOWNLOAD_FILE)
             {
-                Timber.e("\t[initFolders]\t----DOWNLOAD_FILE-----");
                 retrieveDataBaseFileFromGoogleDrive();
             }
             else
@@ -232,11 +231,10 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
         catch (IOException e) { e.printStackTrace(); }
         Timber.d("Folder ID: " + file.getId());
 
-        insertFile(file.getId(),
-                    db.database+".db",
-                    db.getRoomDBPath());
         return file.getId();
     }
+
+//==================================================================================================
 
     /**
      * Function: createFoldersForBackupOnGoogleDrive
@@ -245,36 +243,80 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
      */
     public void createFoldersForBackupOnGoogleDrive()
     {
-        Timber.d("\t[createFoldersForBackupOnGoogleDrive]\tSTART\t");
-
         String mainFolderId = createFolder(ResourcesGetterSingleton.getStr(R.string.path_wardrobe),
                 null);
 
         this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_users),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_users),
                                              mainFolderId));
-        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_upper_outfit),
+        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.menu_upper_level),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_upper_outfit),
                                              mainFolderId));
-        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_lower_outfit),
+        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.menu_lower_level),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_lower_outfit),
                                              mainFolderId));
-        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_outerwear),
+        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.menu_warm_clothes),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_outerwear),
                                              mainFolderId));
-        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_hats),
+        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.menu_hats),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_hats),
                                              mainFolderId));
-        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_shoes),
+        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.menu_boots),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_shoes),
                                              mainFolderId));
-        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.path_accessories),
+        this.listOFFolders.put(ResourcesGetterSingleton.getStr(R.string.menu_accessories),
                                 createFolder(ResourcesGetterSingleton.getStr(R.string.path_accessories),
                                              mainFolderId));
 
+        saveAllFilesFromDatabase(mainFolderId);
+    }
 
-        //TODO: Also copy all images in case no such in GDrive.
+//==================================================================================================
 
+    /**
+     * Function: saveAllFilesFromDatabase
+     * @param rootFolderId String - folder id where to store data in GD
+     * @return Nothing
+     */
+    public void saveAllFilesFromDatabase(String rootFolderId)
+    {
+        //First save database file
+        insertFile(rootFolderId,db.database+".db", db.getRoomDBPath());
+
+        //Second save users
+        String user_folder_id = this.listOFFolders.get(ResourcesGetterSingleton.getStr(R.string.path_users));
+        List<UserObject> users = db.userDao().getAll();
+        for(UserObject user : users)
+        {
+            String fileName = FilenameUtils.getName( user.getUserName());
+
+            String extension = FilenameUtils.getExtension( user.getUserName());
+            if(null != extension)
+            {
+                insertImageFile(user_folder_id,
+                                fileName,
+                                user.getUserName());
+            }
+            else
+            {
+                Timber.d("\t User use default icon. No saving needed.");
+            }
+        }
+
+        //Third save items
+        List<ItemObject> items = db.itemDao().getAll();
+        for(ItemObject item : items)
+        {
+
+            String fileName = FilenameUtils.getName( item.getItemImageName());
+
+            insertImageFile(this.listOFFolders.get(item.getItemMainCategory()),
+                            fileName,
+                            item.getItemImageName());
+        }
+
+        //Fourth save looks
+        //TODO: Fourth save looks
     }
 
 //==================================================================================================
@@ -324,9 +366,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
                         ByteArrayOutputStream baos = (ByteArrayOutputStream) outputStream;
                         baos.writeTo(fos);
                         //---------------------------------------------
-                        //downloadFileContentJson(mService,file.getId());
-                        //---------------------------------------------
-                        Timber.d("isDatabaseFilesAreIdentical: " + isDatabaseFilesAreIdentical());
+                        Timber.d("\t\t---> isDatabaseFilesAreIdentical:\t" + isDatabaseFilesAreIdentical());
                         //---------------------------------------------
                         checkTheDifferenceInDB();
                         //---------------------------------------------
@@ -392,7 +432,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
 //==================================================================================================
 
     /**
-    * Function:
+    * Function: checkTheDifferenceInDB
     * @param
     * @return
     */
@@ -416,6 +456,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
                 {
                     //DELETE such image from GDrive
                     // deleteFile(String fileId)
+                    Timber.e("\t\t I WILL DELETE THIS FILE: " + image_path);
                 }
             }
 
@@ -430,7 +471,9 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
                 if (cur.isNull(0))
                 {
                     //COPY IN GDrive
-                    //insertFile(String folderId, String fileName, String pathName)
+                    Timber.e("\t\t I WILL COPY THIS FILE: " +  item.getItemImageName());
+                    //insertFile(folderId, fileName, pathName)
+                    //insertFile(file.getId(),db.database+".db", db.getRoomDBPath());
                 }
             }
         }
@@ -496,6 +539,25 @@ public class MakeRequestTask extends AsyncTask<Void, Void, List<String>>
             e.printStackTrace();
         }
         System.out.println("File ID: " + file.getId());
+    }
+
+    private void insertImageFile(String folderId, String fileName, String pathName)
+    {
+        File fileMetadata = new File();
+        fileMetadata.setName(fileName);
+        fileMetadata.setParents(Collections.singletonList(folderId));
+
+        java.io.File filePath = new java.io.File(pathName);
+
+        FileContent mediaContent = new FileContent(getMimeType("JPEG"), filePath);
+        try
+        {
+            mService.files().create(fileMetadata, mediaContent)
+                    .setFields("id, parents")
+                    .execute();
+        }
+        catch (IOException e) { e.printStackTrace(); }
+        //System.out.println("File ID: " + file.getId());
     }
 
     /**

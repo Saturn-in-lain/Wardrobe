@@ -53,6 +53,9 @@ import timber.log.Timber;
 /**
  * An abstract activity that handles authorization and connection to the Drive
  * services.
+ *
+ * TODO: Probably deprecated....
+ *
  */
 public abstract class BaseDemoActivity extends AppCompatActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, BaseDemoView, EasyPermissions.PermissionCallbacks

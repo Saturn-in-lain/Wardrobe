@@ -41,12 +41,12 @@
     <string name="action_help">         Help        </string>
 
     <!-- MENU ITEMS -->
-    <string name="menu_upper_level">        Upper Level         </string>
-    <string name="menu_lower_level">        Lower level         </string>
-    <string name="menu_warm_clothes">       Warm Clothes        </string>
-    <string name="menu_hats">               Hats                </string>
-    <string name="menu_accessories">        Accessories         </string>
-    <string name="menu_boots">              Boots               </string>
+    <string name="menu_upper_level"  >      Upper Level         </string>
+    <string name="menu_lower_level"  >      Lower level         </string>
+    <string name="menu_warm_clothes" >      Warm Clothes        </string>
+    <string name="menu_hats"         >      Hats                </string>
+    <string name="menu_accessories"  >      Accessories         </string>
+    <string name="menu_boots"        >      Boots               </string>
 
     <string name="menu_combinations">       Combinations        </string>
     <string name="menu_weather_settings">   Weather settings    </string>
